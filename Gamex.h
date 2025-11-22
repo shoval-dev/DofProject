@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "dof.h"
 
 namespace Gamex
@@ -6,14 +6,14 @@ namespace Gamex
 
 	/**
 	 *
-	 * exeType¿Í»§¶ËÀàĞÍ 0627 0725 1031
-	 * dnf.exe°æ±¾
+	 * exeTypeå®¢æˆ·ç«¯ç±»å‹ 0627 0725 1031
+	 * dnf.exeç‰ˆæœ¬
 	 * 0627  1.180.2.1
 	 * 0725  1.200.4.1
 	 * 1031  1.260.5.1
 	 *
-	 *	- Í¨¹ıdnf.exe»ñÈ¡°æ±¾ĞÅÏ¢
-	 * 	- Í¨¹ı.iniÅäÖÃ¹¦ÄÜÆôÓÃ/¹Ø±Õ
+	 *	- é€šè¿‡dnf.exeè·å–ç‰ˆæœ¬ä¿¡æ¯
+	 * 	- é€šè¿‡.inié…ç½®åŠŸèƒ½å¯ç”¨/å…³é—­
 	 *
 	 * */
 	void DLL_Main();

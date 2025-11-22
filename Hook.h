@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <windows.h>
 #define Naked __declspec(naked)
 #define _v(v1,v2) ((v1|v2)<<8)
@@ -35,3 +35,4 @@ public:
 	BOOL UnHook();
 	BOOL ReHook();
 };
+

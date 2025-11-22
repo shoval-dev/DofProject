@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Hook.h"
 
 INT INSER_DATA = (INT)malloc(1024);
@@ -469,7 +469,7 @@ Naked void _627_FDEDD0() {
 		push ebx
 		push esi
 		push edi
-		mov eax, dword ptr ds : [0x01A367F0]//������ַ
+		mov eax, dword ptr ds : [0x01A367F0]//背包基址
 		xor eax, ebp
 		push eax
 		lea eax, dword ptr ss : [ebp - 0xC]
@@ -1437,14 +1437,14 @@ Naked void _627_Hook_7815B0() {
 	}
 }
 
-int a = 1;//ʱװ��λ���� = 0 ��(ֻ�е���0��ʱ���)
-int b = 1;//װ����λ���� = 0 ��(ֻ�е���0��ʱ���)
+int a = 1;//时装槽位开关 = 0 关(只有等于0的时候关)
+int b = 1;//装备槽位开关 = 0 关(只有等于0的时候关)
 Naked void _627_Hook_78A7ED() {
 	_asm {
 		call edx
 		cmp dword ptr ds : [eax] , 0xFFFF
 		ja labnl1
-		cmp dword ptr ds : [eax] , 0xA//�������һ�Σ�ʶ��ʱװ�ģ����Ҫװ���أ����������ټ�һ���жϣ�Ϊ������
+		cmp dword ptr ds : [eax] , 0xA//额外加这一段，识别时装的，如果要装开关，就在下面再加一个判断，为真则跳
 		jb labnlA
 		pushad
 		mov edi, dword ptr ds : [0x01B466D8]
@@ -1994,34 +1994,34 @@ Naked void _627_Hook_719D6F() {
 
 
 void __fastcall Mosaic_0627() {
-	//-ͷ װ����ʱװ��Ƕ
-	WriteCall((LPVOID)0x00F554E1, _627_Call_F554E1);//��ȫ������Ϣ��ʾ
-	WriteJmp((LPVOID)0x006ACF80, _627_Hook_6ACF80);//��ȫȱ�ٵĴ����,���˵�ַ�жϴ���������������ط������õ��µ����ˡ�
-	WriteJmp((LPVOID)0x00F4E280, _627_Hook_F4E280);//��ʾ���Ļ�����Ϣ
-	WriteJmp((LPVOID)0x007ACC08, _627_Hook_7ACC08);//ʱװͼ����ʾ��λ(������������ʾ������¡)
-	//�����ǲ���
-	WriteJmp((LPVOID)0x007815B0, _627_Hook_7815B0);//װ��ͼ����ʾ��λ(������������ʾ)
-	WriteJmp((LPVOID)0x0078A7ED, _627_Hook_78A7ED);//�û����Լ���λ����д�뵽װ����(��������ûЧ��)
-	WriteJmp((LPVOID)0x00797E40, _627_Hook_797E40);//װ������Ч����Ч
-	WriteJmp((LPVOID)0x00F10539, _627_Hook_F10539);//��״�����ʾװ��
-	WriteJmp((LPVOID)0x007B926F, _627_Hook_7B926F);//������Ƕ��װ��/ʱװ���ó�����Ƕ�����
-	WriteJmp((LPVOID)0x00FD3F9D, _627_Hook_FD3F9D);//��װ����ʱװ������ó���Ƕ���µĽ���(������ʾ)
-	WriteJmp((LPVOID)0x00F10767, _627_Hook_F10767);//��չ�������(����������װ������ʱװ)ʱװ
-	WriteJmp((LPVOID)0x00FD37AE, _627_Hook_FD37AE);//��չ�������(����������װ������ʱװ)װ��
-	WriteJmp((LPVOID)0x0070BD0E, _627_Hook_70BD0E);//������ذ���ʾ,���ھ�������ʾװ������ʱװ
-	WriteJmp((LPVOID)0x00F10BAD, _627_Hook_F10BAD);//��Ƕ��ذ���ʾ��
-	WriteJmp((LPVOID)0x00746A22, _627_Hook_746A22);//�̵�ع���ʾ
-	WriteJmp((LPVOID)0x0078A933, _627_Hook_78A933);//������������,�����ó����λ��
-	WriteJmp((LPVOID)0x0074C473, _627_Hook_74C473);//����������λ��
-	WriteJmp((LPVOID)0x00EAB94F, _627_Hook_EAB94F);//���ڻع��е�����Ƕ��װ���������ݵĴ���(�����ڻع��е�ʬ����б�ʬ�������ݺݵس�)
-	WriteJmp((LPVOID)0x0074C814, _627_Hook_74C814);//�������洢����Ϣ
-	WriteJmp((LPVOID)0x0074CBCE, _627_Hook_74CBCE);//��������,���Hook�����õ�����������������
-	WriteJmp((LPVOID)0x00747911, _627_Hook_747911);//�޸��ƺŲ����ݲ�д������
-	WriteJmp((LPVOID)0x00719D6F, _627_Hook_719D6F);//�޸����ͼ���ض��װ������ϱ�������
-	RtlCopyMemory((LPVOID)0x00746A1E, "\x84\xC9", 2);//��������ʾ��Ϣ
-	RtlCopyMemory((LPVOID)0x00E6EF8E, "\xE9\x8D\x00\x00\x00", 5);//�õ���ʶ��(�������⴦��,����ÿ�һ���Լ��������ַ����)
-	RtlCopyMemory((LPVOID)0x006B18B6, "\xEB\x4C", 2);//���ε�ԭ���Ļ���Ƕ�봰�ڵ���
-	RtlCopyMemory((LPVOID)0x00E83651, "\x90\x90\x90\x90\x90\x90", 6);//�����е�װ����������д��
-	RtlCopyMemory((LPVOID)0x00E83687, "\x90\x90", 2);//�����е�װ����������д��
-	//-β װ����ʱװ��Ƕ
+	//-头 装备加时装镶嵌
+	WriteCall((LPVOID)0x00F554E1, _627_Call_F554E1);//补全徽章信息显示
+	WriteJmp((LPVOID)0x006ACF80, _627_Hook_6ACF80);//补全缺少的代码段,做了地址判断处理，免得在其他地方被调用导致的闪退。
+	WriteJmp((LPVOID)0x00F4E280, _627_Hook_F4E280);//显示面板的徽章信息
+	WriteJmp((LPVOID)0x007ACC08, _627_Hook_7ACC08);//时装图标显示孔位(不做处理不显示除开克隆)
+	//以上是补码
+	WriteJmp((LPVOID)0x007815B0, _627_Hook_7815B0);//装备图标显示孔位(不做处理不显示)
+	WriteJmp((LPVOID)0x0078A7ED, _627_Hook_78A7ED);//让徽章以及孔位数据写入到装备中(不做处理没效果)
+	WriteJmp((LPVOID)0x00797E40, _627_Hook_797E40);//装备徽章效果生效
+	WriteJmp((LPVOID)0x00F10539, _627_Hook_F10539);//打孔窗口显示装备
+	WriteJmp((LPVOID)0x007B926F, _627_Hook_7B926F);//让有镶嵌的装备/时装调用出徽章嵌入界面
+	WriteJmp((LPVOID)0x00FD3F9D, _627_Hook_FD3F9D);//让装备和时装共存调用出镶嵌徽章的界面(持续显示)
+	WriteJmp((LPVOID)0x00F10767, _627_Hook_F10767);//拓展发包编号(用于区分是装备还是时装)时装
+	WriteJmp((LPVOID)0x00FD37AE, _627_Hook_FD37AE);//拓展发包编号(用于区分是装备还是时装)装备
+	WriteJmp((LPVOID)0x0070BD0E, _627_Hook_70BD0E);//开孔完回包显示,用于决定是显示装备还是时装
+	WriteJmp((LPVOID)0x00F10BAD, _627_Hook_F10BAD);//镶嵌完回包显示。
+	WriteJmp((LPVOID)0x00746A22, _627_Hook_746A22);//商店回购显示
+	WriteJmp((LPVOID)0x0078A933, _627_Hook_78A933);//清理外侵入者,让它让出这个位置
+	WriteJmp((LPVOID)0x0074C473, _627_Hook_74C473);//外侵入者上位。
+	WriteJmp((LPVOID)0x00EAB94F, _627_Hook_EAB94F);//对在回购中的有镶嵌的装备进行数据的处理(对躺在回购中的尸体进行鞭尸处理，狠狠地抽)
+	WriteJmp((LPVOID)0x0074C814, _627_Hook_74C814);//分析包存储的信息
+	WriteJmp((LPVOID)0x0074CBCE, _627_Hook_74CBCE);//掉落畜生,这个Hook就是拿刀砍死这个掉落的畜生
+	WriteJmp((LPVOID)0x00747911, _627_Hook_747911);//修复称号簿数据不写入问题
+	WriteJmp((LPVOID)0x00719D6F, _627_Hook_719D6F);//修复设计图返回多个装备或材料崩溃问题
+	RtlCopyMemory((LPVOID)0x00746A1E, "\x84\xC9", 2);//邮箱中显示信息
+	RtlCopyMemory((LPVOID)0x00E6EF8E, "\xE9\x8D\x00\x00\x00", 5);//让道具识别(不做额外处理,想更好看一点自己在这个地址分析)
+	RtlCopyMemory((LPVOID)0x006B18B6, "\xEB\x4C", 2);//屏蔽掉原本的徽章嵌入窗口调用
+	RtlCopyMemory((LPVOID)0x00E83651, "\x90\x90\x90\x90\x90\x90", 6);//拍卖行的装备徽章数据写入
+	RtlCopyMemory((LPVOID)0x00E83687, "\x90\x90", 2);//拍卖行的装备徽章数据写入
+	//-尾 装备加时装镶嵌
 }

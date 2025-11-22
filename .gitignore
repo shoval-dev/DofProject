@@ -1,39 +1,83 @@
-# Prerequisites
+########################
+# Prerequisites / 依赖
+########################
 *.d
 
-# Compiled Object files
+########################
+# Compiled Object files / 目标文件
+########################
 *.slo
 *.lo
 *.o
 *.obj
 
-# Precompiled Headers
+########################
+# Precompiled Headers / 预编译头
+########################
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
+########################
+# Compiled Dynamic libraries / 动态库
+########################
 *.so
 *.dylib
 *.dll
 
+########################
 # Fortran module files
+########################
 *.mod
 *.smod
 
-# Compiled Static libraries
+########################
+# Compiled Static libraries / 静态库
+########################
 *.lai
 *.la
 *.a
 *.lib
 
-# Executables
+########################
+# Executables / 可执行文件
+########################
 *.exe
 *.out
 *.app
-/x64
-/Release
-/Debug
-/DofProject/Release/
-/DofProject/Debug/
-/DofProject/x64/
-.vs
+
+########################
+# Visual Studio 输出目录
+########################
+/Debug/
+/Release/
+/x64/
+/DofProject/       # 项目中间文件目录（tlog、obj 等）
+.vs/
+
+########################
+# Visual Studio 中间文件 / 数据库
+########################
+*.ilk
+*.idb
+*.ipdb
+*.iobj
+*.pdb
+*.exp
+*.tlog
+*.log
+*.lastbuildstate
+*.VC.db
+*.VC.opendb
+
+# 用户个性化设置（不进仓库）
+*.user
+*.suo
+
+# 临时文件 / 备份
+*.tmp
+*.temp
+*.bak
+*~
+
+# 崩溃转储
+*.dmp

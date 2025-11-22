@@ -1,4 +1,4 @@
-#include "GameStruct.h"
+ï»¿#include "GameStruct.h"
 
 void GameStruct::Load()
 {
@@ -7,23 +7,23 @@ void GameStruct::Load()
 	character.X = ReadFloat(Character_Base + 0x18c);
 	character.Y = ReadFloat(Character_Base + 0x190);
 	character.Z = ReadFloat(Character_Base + 0x194);
-	character.HP = ReadDword(Character_Base + 0x36A0); // ×î´óÑªÁ¿
-	character.State = ReadDword(ReadDword(ReadDword(GAME_STATE) + 0x14) + 0x28); // ÈËÎï×´Ì¬
+	character.HP = ReadDword(Character_Base + 0x36A0); // æœ€å¤§è¡€é‡
+	character.State = ReadDword(ReadDword(ReadDword(GAME_STATE) + 0x14) + 0x28); // äººç‰©çŠ¶æ€
 
-	// 0x1A5FB18 ·¿¼ä±àºÅ»ùÖ·  Ê±¼ä»ùÖ·0x20A050 ·¿¼ä×ø±êÆ«ÒÆ0x8C ¸±±¾µ±Ç°XÆ«ÒÆ0x610 ¸±±¾µ±Ç°YÆ«ÒÆ0x614
+	// 0x1A5FB18 æˆ¿é—´ç¼–å·åŸºå€  æ—¶é—´åŸºå€0x20A050 æˆ¿é—´åæ ‡åç§»0x8C å‰¯æœ¬å½“å‰Xåç§»0x610 å‰¯æœ¬å½“å‰Yåç§»0x614
 	character.RoomX = ReadDword(ReadDword(ReadDword(ReadDword(0x1A5FB18) + 0x20A050) + 0x8C) + 0x610);
 	character.RoomY = ReadDword(ReadDword(ReadDword(ReadDword(0x1A5FB18) + 0x20A050) + 0x8C) + 0x614);
-	LogMessage("×ÔÉíÊôĞÔ£ºState=%d, X=%0.1f,Y=%0.1f,Z=%0.1f ·¿¼ä×ø±ê(%d,%d) MaxHP=%d", character.State, character.X, character.Y, character.Z, character.RoomX, character.RoomY, character.HP);
+	LogMessage("è‡ªèº«å±æ€§ï¼šState=%d, X=%0.1f,Y=%0.1f,Z=%0.1f æˆ¿é—´åæ ‡(%d,%d) MaxHP=%d", character.State, character.X, character.Y, character.Z, character.RoomX, character.RoomY, character.HP);
 }
 
-// ÊÍ·Å¼¼ÄÜ(¼¼ÄÜ´úÂë ÉËº¦ xÖá yÖá zÖá)
+// é‡Šæ”¾æŠ€èƒ½(æŠ€èƒ½ä»£ç  ä¼¤å®³ xè½´ yè½´ zè½´)
 void GameStruct::ReleaseSkill(INT skillId, INT injury) {
 	this->Load();
 	INT x = static_cast<INT>(character.X);
 	INT y = static_cast<INT>(character.Y);
 	INT z = static_cast<INT>(character.Z);
 
-	// ÊÖ¶¯»ñÈ¡ÈËÎïÎ»ÖÃ
+	// æ‰‹åŠ¨è·å–äººç‰©ä½ç½®
 	_asm {
 		pushad
 		push 0
@@ -35,15 +35,15 @@ void GameStruct::ReleaseSkill(INT skillId, INT injury) {
 		push 0x4
 		push 0
 		push 0
-		push z // zÖá
-		push y // yÖá
-		push x // xÖá
-		push injury // ÉËº¦
-		push skillId // ¼¼ÄÜ´úÂë
-		mov ecx, dword ptr[CHARACTER_BASE] //ÈËÎï»ùÖ·
+		push z // zè½´
+		push y // yè½´
+		push x // xè½´
+		push injury // ä¼¤å®³
+		push skillId // æŠ€èƒ½ä»£ç 
+		mov ecx, dword ptr[CHARACTER_BASE] //äººç‰©åŸºå€
 		mov ecx, [ecx]
 		push ecx
-		mov eax, SIMULATE_CALL // Ä£Äâcall
+		mov eax, SIMULATE_CALL // æ¨¡æ‹Ÿcall
 		call eax
 		popad
 	}
@@ -53,22 +53,22 @@ wchar_t* GameStruct::GetName() {
 	UINT Character_Base = readVal(CHARACTER_BASE);
 	character.Name = (wchar_t*)readVal(Character_Base + 0x258);
 	char* name = UnicodeToAnsi(character.Name);
-	LogMessage("½ÇÉ«Ãû³Æ£º%s", name);
+	LogMessage("è§’è‰²åç§°ï¼š%s", name);
 
 	return character.Name;
 }
 
 
-// µØÏÂ³ÇÖĞÊ¹ÓÃÏûºÄÆ· itemId ÎïÆ·id
+// åœ°ä¸‹åŸä¸­ä½¿ç”¨æ¶ˆè€—å“ itemId ç‰©å“id
 static void UseConsumable(const int& itemId)
 {
-	LogMessage("µØÏÂ³ÇÖĞÊ¹ÓÃÏûºÄÆ·Id:%d", itemId, "");
+	LogMessage("åœ°ä¸‹åŸä¸­ä½¿ç”¨æ¶ˆè€—å“Id:%d", itemId, "");
 
 	_asm {
 		pushad
-		mov ecx, dword ptr[CHARACTER_BASE] // ÈËÎï»ùÖ·
+		mov ecx, dword ptr[CHARACTER_BASE] // äººç‰©åŸºå€
 		mov edx, [ecx]
-		mov eax, itemId // ÎïÆ·id(16½øÖÆ)
+		mov eax, itemId // ç‰©å“id(16è¿›åˆ¶)
 		push eax
 		mov edx, [edx + 0x5E4]
 		call edx
@@ -76,17 +76,17 @@ static void UseConsumable(const int& itemId)
 	}
 }
 
-// µØÏÂ³ÇÖĞÊ¹ÓÃÒ©¼Á
+// åœ°ä¸‹åŸä¸­ä½¿ç”¨è¯å‰‚
 void GameStruct::UseDungeonItem()
 {
 	/**
-	* 2600027 ÉñÁéµÄ±ÓÓÓ 0x27ac5b
-	* 2600261 28ºÅ 0x27ad45
-	* 2680709 ¶Å¶û·ò
+	* 2600027 ç¥çµçš„åº‡ä½‘ 0x27ac5b
+	* 2600261 28å· 0x27ad45
+	* 2680709 æœå°”å¤«
 	*/
-	// ¶¨ÒåÎïÆ·Êı×é
+	// å®šä¹‰ç‰©å“æ•°ç»„
 	//int DrugsArr[2] = { 0x27ad45,0x27ac5b };
-	// ¼ÆËãÔªËØ¸öÊı
+	// è®¡ç®—å…ƒç´ ä¸ªæ•°
 	/*size_t eleNum = sizeof(DrugsArr) / sizeof(DrugsArr[0]);
 	for (size_t i = 0; i < eleNum; i++)
 	{
@@ -94,7 +94,7 @@ void GameStruct::UseDungeonItem()
 		UseConsumable(itemId);
 	}*/
 
-	// ÓÎÏ·±ÀÀ£ »ã±àÖ±½Ó×¢ÈëÕı³£???
+	// æ¸¸æˆå´©æºƒ æ±‡ç¼–ç›´æ¥æ³¨å…¥æ­£å¸¸???
 	__asm {
 		pushad
 		mov ecx, [0x1ab7cdc]
@@ -106,4 +106,5 @@ void GameStruct::UseDungeonItem()
 		popad
 	}
 }
+
 

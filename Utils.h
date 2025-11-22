@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "dof.h"
 #include <fcntl.h>
 #include <io.h>
@@ -11,7 +11,7 @@ inline  uint8_t hexToByte(const std::string& hex)
 	return static_cast<uint8_t>(std::stoi(hex, nullptr, 16));
 }
 
-// ´òÓ¡ÀàĞÍÃû³Æ
+// æ‰“å°ç±»å‹åç§°
 template <typename T>
 inline void printTypeName(const T&)
 {
@@ -30,7 +30,7 @@ inline void printTypeName(const T&)
 }
 
 
-// »ñÈ¡exeÖ´ĞĞ³ÌĞòÂ·¾¶
+// è·å–exeæ‰§è¡Œç¨‹åºè·¯å¾„
 inline std::string GetProgramDir()
 {
 	char szDir[2048] = { 0 };
@@ -41,7 +41,7 @@ inline std::string GetProgramDir()
 }
 
 
-// »ñÈ¡ÎÄ¼ş°æ±¾ĞÅÏ¢
+// è·å–æ–‡ä»¶ç‰ˆæœ¬ä¿¡æ¯
 inline std::string GetFileVersion(const std::string& filePath)
 {
 	DWORD dwHandle = 0;
@@ -67,13 +67,13 @@ inline std::string GetFileVersion(const std::string& filePath)
 		return "";
 	}
 
-	// È·±£·µ»ØµÄÊÇ VS_FIXEDFILEINFO ½á¹¹µÄ´óĞ¡
+	// ç¡®ä¿è¿”å›çš„æ˜¯ VS_FIXEDFILEINFO ç»“æ„çš„å¤§å°
 	if (uLen < sizeof(VS_FIXEDFILEINFO)) {
 		std::cerr << "Invalid VS_FIXEDFILEINFO size." << std::endl;
 		return "";
 	}
 
-	// »ñÈ¡°æ±¾ºÅ
+	// è·å–ç‰ˆæœ¬å·
 	WORD major = HIWORD(pFileInfo->dwFileVersionMS);
 	WORD minor = LOWORD(pFileInfo->dwFileVersionMS);
 	WORD revision = HIWORD(pFileInfo->dwFileVersionLS);
@@ -82,7 +82,7 @@ inline std::string GetFileVersion(const std::string& filePath)
 	return std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(revision) + "." + std::to_string(build);
 }
 
-// »ñÈ¡¿Í»§¶Ë°æ±¾ÀàĞÍ
+// è·å–å®¢æˆ·ç«¯ç‰ˆæœ¬ç±»å‹
 inline std::string getExeType(const std::string& version) {
 	std::string exeType = "0627";
 	if (version == "1.180.2.1") {
@@ -97,36 +97,36 @@ inline std::string getExeType(const std::string& version) {
 	return exeType;
 }
 
-// »ñÈ¡µ±Ç°Ê±¼äµÄ×Ö·û´®
+// è·å–å½“å‰æ—¶é—´çš„å­—ç¬¦ä¸²
 inline static std::string getCurrentTime() {
 	std::time_t now = std::time(nullptr);
 	struct tm localTime;
 	char buf[100];
-	localtime_s(&localTime, &now); // ×ª»»Îª±¾µØÊ±¼ä
+	localtime_s(&localTime, &now); // è½¬æ¢ä¸ºæœ¬åœ°æ—¶é—´
 	std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &localTime);
 	return std::string(buf);
 }
 
-// »ñÈ¡µ±Ç°Ê±¼äµÄ¿í×Ö·û´®
+// è·å–å½“å‰æ—¶é—´çš„å®½å­—ç¬¦ä¸²
 inline static std::wstring getCurrentTimeW()
 {
 	std::time_t now = std::time(nullptr);
 	std::tm localTime;
-	// Ê¹ÓÃ localtime_s ´úÌæ localtime ÒÔÈ·±£Ïß³Ì°²È«
+	// ä½¿ç”¨ localtime_s ä»£æ›¿ localtime ä»¥ç¡®ä¿çº¿ç¨‹å®‰å…¨
 	errno_t err = localtime_s(&localTime, &now);
 	if (err != 0) {
-		// ´íÎó´¦Àí£¬ÕâÀï¼òµ¥µØÅ×³öÒì³£
+		// é”™è¯¯å¤„ç†ï¼Œè¿™é‡Œç®€å•åœ°æŠ›å‡ºå¼‚å¸¸
 		throw std::runtime_error("Failed to convert time to local time.");
 	}
 
 	std::wstringstream wss;
-	// ÉèÖÃÇøÓòÉèÖÃÒÔÈ·±£Ê±¼ä¸ñÊ½ÕıÈ·
+	// è®¾ç½®åŒºåŸŸè®¾ç½®ä»¥ç¡®ä¿æ—¶é—´æ ¼å¼æ­£ç¡®
 	wss.imbue(std::locale(""));
 	wss << std::put_time(&localTime, L"%Y-%m-%d %H:%M:%S");
 	return wss.str();
 }
 
-// ÅĞ¶Ï¿í×Ö·û´®ÊÇ·ñÎªÊı×Ö
+// åˆ¤æ–­å®½å­—ç¬¦ä¸²æ˜¯å¦ä¸ºæ•°å­—
 inline bool isNumberW(const std::wstring& str)
 {
 	for (size_t i = 0; i < str.length(); i++)
@@ -141,23 +141,23 @@ inline bool isNumberW(const std::wstring& str)
 	return true;
 }
 
-// ¹ıÂË×Ö·û´®Á½¶ËµÄ¿Õ¸ñ
+// è¿‡æ»¤å­—ç¬¦ä¸²ä¸¤ç«¯çš„ç©ºæ ¼
 inline static std::wstring trim(const std::wstring& str)
 {
 	size_t first = str.find_first_not_of(L" ");
 	size_t last = str.find_last_not_of(L" ");
 
-	// Èç¹û×Ö·û´®È«ÊÇ¿Õ¸ñ»òÕßÎª¿Õ£¬Ôò·µ»Ø¿Õ×Ö·û´®
+	// å¦‚æœå­—ç¬¦ä¸²å…¨æ˜¯ç©ºæ ¼æˆ–è€…ä¸ºç©ºï¼Œåˆ™è¿”å›ç©ºå­—ç¬¦ä¸²
 	if (first == std::wstring::npos || last == std::wstring::npos)
 	{
 		return L"";
 	}
 
-	// ·µ»ØÈ¥³ıÁ½¶Ë¿Õ¸ñºóµÄ×Ó×Ö·û´®
+	// è¿”å›å»é™¤ä¸¤ç«¯ç©ºæ ¼åçš„å­å­—ç¬¦ä¸²
 	return str.substr(first, last - first + 1);
 }
 
-// ·Ö¸î¿í×Ö·û´® Ä¬ÈÏÒÔ¿Õ¸ñ(L' ')·Ö¸î, L','
+// åˆ†å‰²å®½å­—ç¬¦ä¸² é»˜è®¤ä»¥ç©ºæ ¼(L' ')åˆ†å‰², L','
 inline static std::vector<std::wstring> splitStrW(const std::wstring& input, wchar_t delimiter = L' ')
 {
 	std::vector<std::wstring> tokens;
@@ -171,7 +171,7 @@ inline static std::vector<std::wstring> splitStrW(const std::wstring& input, wch
 		end = input.find(delimiter, start);
 	}
 
-	// Ìí¼Ó×îºóÒ»¸ötoken£¨Èç¹û´æÔÚ£©
+	// æ·»åŠ æœ€åä¸€ä¸ªtokenï¼ˆå¦‚æœå­˜åœ¨ï¼‰
 	if (start < input.size())
 	{
 		tokens.push_back(input.substr(start));
@@ -181,25 +181,25 @@ inline static std::vector<std::wstring> splitStrW(const std::wstring& input, wch
 }
 
 
-// Æ´½Ó¿í×Ö·ûÁ½¸ö
+// æ‹¼æ¥å®½å­—ç¬¦ä¸¤ä¸ª
 inline void formatAndConcat(wchar_t* buffer, size_t bufferSize, const wchar_t* str1, const wchar_t* str2) {
-	// ÎªÁË¼òµ¥Æğ¼û£¬ÕâÀï²»¼ì²é»º³åÇø´óĞ¡ÊÇ·ñ×ã¹»
+	// ä¸ºäº†ç®€å•èµ·è§ï¼Œè¿™é‡Œä¸æ£€æŸ¥ç¼“å†²åŒºå¤§å°æ˜¯å¦è¶³å¤Ÿ
 	swprintf_s(buffer, bufferSize, L"%ls%ls", str1, str2);
 }
 
-// Æ´½Ó¿í×Ö·û¶à¸ö
+// æ‹¼æ¥å®½å­—ç¬¦å¤šä¸ª
 inline void formatAndConcatSafe(wchar_t* buffer, size_t bufferSizeInBytes, const wchar_t* format, ...) {
 	va_list args;
 	va_start(args, format);
 	if (bufferSizeInBytes < sizeof(wchar_t)) {
-		// ´¦Àí´íÎóÇé¿ö£¬ÀıÈçÍ¨¹ıÊä³ö´íÎóĞÅÏ¢»òÉèÖÃ´íÎóÂë
+		// å¤„ç†é”™è¯¯æƒ…å†µï¼Œä¾‹å¦‚é€šè¿‡è¾“å‡ºé”™è¯¯ä¿¡æ¯æˆ–è®¾ç½®é”™è¯¯ç 
 		va_end(args);
 		return;
 	}
-	int result = vswprintf_s(buffer, bufferSizeInBytes / sizeof(wchar_t), format, args); // ×¢Òâ£ºÕâÀïÎÒÃÇ³ıÒÔ sizeof(wchar_t) À´µÃµ½×Ö·ûÊı
+	int result = vswprintf_s(buffer, bufferSizeInBytes / sizeof(wchar_t), format, args); // æ³¨æ„ï¼šè¿™é‡Œæˆ‘ä»¬é™¤ä»¥ sizeof(wchar_t) æ¥å¾—åˆ°å­—ç¬¦æ•°
 	if (result == -1) {
-		// ´¦Àí´íÎó£¬ÀıÈçÉèÖÃ´íÎóÂë»òÊä³ö´íÎóĞÅÏ¢
-		// ×¢Òâ£ºÔÚÊµ¼ÊÓ¦ÓÃÖĞ£¬Äã¿ÉÄÜĞèÒª¸ü¸´ÔÓµÄ´íÎó´¦ÀíÂß¼­
+		// å¤„ç†é”™è¯¯ï¼Œä¾‹å¦‚è®¾ç½®é”™è¯¯ç æˆ–è¾“å‡ºé”™è¯¯ä¿¡æ¯
+		// æ³¨æ„ï¼šåœ¨å®é™…åº”ç”¨ä¸­ï¼Œä½ å¯èƒ½éœ€è¦æ›´å¤æ‚çš„é”™è¯¯å¤„ç†é€»è¾‘
 		wprintf(L"Error formatting string.\n");
 	}
 	else if (static_cast<size_t>(result) + 1 >= bufferSizeInBytes) {
@@ -208,22 +208,22 @@ inline void formatAndConcatSafe(wchar_t* buffer, size_t bufferSizeInBytes, const
 	va_end(args);
 }
 
-// wchar_t×ªchar
+// wchar_tè½¬char
 //inline std::string WCharToChar(const wchar_t* wstr) {
 //	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 //	return converter.to_bytes(wstr);
 //}
 
-// ´´½¨¿ØÖÆÌ¨
+// åˆ›å»ºæ§åˆ¶å°
 inline void CreateConsole()
 {
 	HWND consoleWindowHandle = NULL;
-	// ´´½¨Ò»¸öĞÂµÄ¿ØÖÆÌ¨
+	// åˆ›å»ºä¸€ä¸ªæ–°çš„æ§åˆ¶å°
 	if (AllocConsole()) {
-		// »ñÈ¡ĞÂ´´½¨µÄ¿ØÖÆÌ¨´°¿Ú¾ä±ú
+		// è·å–æ–°åˆ›å»ºçš„æ§åˆ¶å°çª—å£å¥æŸ„
 		consoleWindowHandle = GetConsoleWindow();
 		if (consoleWindowHandle != NULL) {
-			// ´òÓ¡¿ØÖÆÌ¨´°¿Ú¾ä±ú
+			// æ‰“å°æ§åˆ¶å°çª—å£å¥æŸ„
 			printf("Console window handle: %p\n", consoleWindowHandle);
 		}
 		else {
@@ -233,32 +233,32 @@ inline void CreateConsole()
 	else {
 		printf("Failed to create a console.\n");
 	}
-	// ÉèÖÃ¿ØÖÆÌ¨Êä³öµÄ´úÂëÒ³Îª UTF-8 (65001)
-	// ÉèÖÃ¿ØÖÆÌ¨Êä³öµÄ´úÂëÒ³Îª GBK (CP936)
+	// è®¾ç½®æ§åˆ¶å°è¾“å‡ºçš„ä»£ç é¡µä¸º UTF-8 (65001)
+	// è®¾ç½®æ§åˆ¶å°è¾“å‡ºçš„ä»£ç é¡µä¸º GBK (CP936)
 	// SetConsoleOutputCP(936);
 
-	// ÖØĞÂ°ó¶¨±ê×¼ÊäÈë¡¢Êä³öºÍ´íÎóÁ÷
+	// é‡æ–°ç»‘å®šæ ‡å‡†è¾“å…¥ã€è¾“å‡ºå’Œé”™è¯¯æµ
 	FILE* stream;
 	freopen_s(&stream, "CONOUT$", "w", stdout);
 	freopen_s(&stream, "CONOUT$", "w", stderr);
 	freopen_s(&stream, "CONIN$", "r", stdin);
 
-	// ½«±ê×¼Á÷Ä£Ê½ÉèÖÃÎª¶ş½øÖÆÄ£Ê½
+	// å°†æ ‡å‡†æµæ¨¡å¼è®¾ç½®ä¸ºäºŒè¿›åˆ¶æ¨¡å¼
 	int _s1 = _setmode(_fileno(stdout), _O_BINARY);
 	int _s2 = _setmode(_fileno(stdin), _O_BINARY);
 	int _s3 = _setmode(_fileno(stderr), _O_BINARY);
 
-	// ÉèÖÃstdoutÎª¿í×Ö·ûÄ£Ê½
+	// è®¾ç½®stdoutä¸ºå®½å­—ç¬¦æ¨¡å¼
 	//_setmode(_fileno(stdout), _O_WTEXT);
-	// ÉèÖÃstderrÎª¿í×Ö·ûÄ£Ê½
+	// è®¾ç½®stderrä¸ºå®½å­—ç¬¦æ¨¡å¼
 	//_setmode(_fileno(stderr), _O_WTEXT);
 
-	// ²âÊÔÊä³ö
+	// æµ‹è¯•è¾“å‡º
 	printf("Console allocated successfully!\n");
 }
 
 inline void Cleanup() {
-	// Ö´ĞĞÇåÀí²Ù×÷£¬Èç½â³ı¹³×Ó¡¢¹Ø±Õ¿ØÖÆÌ¨µÈ
-	// ÀıÈç£¬¹Ø±Õ¿ØÖÆÌ¨£º
+	// æ‰§è¡Œæ¸…ç†æ“ä½œï¼Œå¦‚è§£é™¤é’©å­ã€å…³é—­æ§åˆ¶å°ç­‰
+	// ä¾‹å¦‚ï¼Œå…³é—­æ§åˆ¶å°ï¼š
 	FreeConsole();
 }

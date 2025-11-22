@@ -1,244 +1,244 @@
-#pragma once
+ï»¿#pragma once
 #include "Gamex.h"
 #include "Game.h"
 #include "FastCall.h"
 #include "Mosaic.h"
 #include "SkilSlot.h"
 
-// ´´½¨¶ÁĞ´Àà
+// åˆ›å»ºè¯»å†™ç±»
 Memory dx;
 
-// ÔØÈëÅäÖÃ
+// è½½å…¥é…ç½®
 static void loadConfig()
 {
 	std::string programDir = GetProgramDir();
 	std::string config_file = programDir + '\\' + "dof.ini";
-	xini_file_t xini_file(config_file);// ³õÊ¼»¯ÅäÖÃÎÄ¼ş¶ÁĞ´Àà
+	xini_file_t xini_file(config_file);// åˆå§‹åŒ–é…ç½®æ–‡ä»¶è¯»å†™ç±»
 
 	std::string programPath = programDir + "\\DNF.exe";
-	std::string version = GetFileVersion(programPath); // ¿Í»§¶Ë°æ±¾ĞÅÏ¢
+	std::string version = GetFileVersion(programPath); // å®¢æˆ·ç«¯ç‰ˆæœ¬ä¿¡æ¯
 
 	if (!fs::exists(config_file)) {
-		xini_file["ÏµÍ³ÅäÖÃ"]["·şÎñÆ÷IP"] = "192.168.200.131";
-		xini_file["ÏµÍ³ÅäÖÃ"]["¿Í»§¶Ë°æ±¾"] = version;
-		xini_file["ÏµÍ³ÅäÖÃ"]["±¾µØÈÕÖ¾"] = 0;
-		xini_file["ÏµÍ³ÅäÖÃ"]["HOOKÁÄÌìÏûÏ¢"] = 0;
+		xini_file["ç³»ç»Ÿé…ç½®"]["æœåŠ¡å™¨IP"] = "192.168.200.131";
+		xini_file["ç³»ç»Ÿé…ç½®"]["å®¢æˆ·ç«¯ç‰ˆæœ¬"] = version;
+		xini_file["ç³»ç»Ÿé…ç½®"]["æœ¬åœ°æ—¥å¿—"] = 0;
+		xini_file["ç³»ç»Ÿé…ç½®"]["HOOKèŠå¤©æ¶ˆæ¯"] = 0;
 
-		xini_file["¹¦ÄÜÅäÖÃ"]["±¾µØGM"] = 0; // ½¨Òé¹Ø±Õ
-		xini_file["¹¦ÄÜÅäÖÃ"]["×°±¸ÏâÇ¶"] = 0;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ÎÄ±¾Õ³ÌùÈ¨ÏŞ"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ÓÊ¼şGM±êÊ¶"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["¹Ø±Õ»Ø¹ºÉÌµê"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["¼¼ÄÜÀ¸ÏÔÊ¾¼¼ÄÜÃû³Æ"] = 0;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´233°üÍ·"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´ÒÆ¶¯ÎïÆ·"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´×ÖÄ¸ÏÔÊ¾"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["½ûÓÃ×îĞ¡»¯ÆäËû´°¿Ú"] = 0;
-		xini_file["¹¦ÄÜÅäÖÃ"]["Ëõ·ÅÓÅ»¯"] = 0;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´ÁìÖ÷Ö®Ëş"] = 1;
-		xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´¶ş¾õÃû³ÆÂÒÂë"] = 0;
-		xini_file["¹¦ÄÜÅäÖÃ"]["Ä¬ÈÏ´´½¨µŞÔìÕß"] = 0;
+		xini_file["åŠŸèƒ½é…ç½®"]["æœ¬åœ°GM"] = 0; // å»ºè®®å…³é—­
+		xini_file["åŠŸèƒ½é…ç½®"]["è£…å¤‡é•¶åµŒ"] = 0;
+		xini_file["åŠŸèƒ½é…ç½®"]["æ–‡æœ¬ç²˜è´´æƒé™"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["é‚®ä»¶GMæ ‡è¯†"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["å…³é—­å›è´­å•†åº—"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["æŠ€èƒ½æ æ˜¾ç¤ºæŠ€èƒ½åç§°"] = 0;
+		xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤233åŒ…å¤´"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤ç§»åŠ¨ç‰©å“"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤å­—æ¯æ˜¾ç¤º"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["ç¦ç”¨æœ€å°åŒ–å…¶ä»–çª—å£"] = 0;
+		xini_file["åŠŸèƒ½é…ç½®"]["ç¼©æ”¾ä¼˜åŒ–"] = 0;
+		xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤é¢†ä¸»ä¹‹å¡”"] = 1;
+		xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤äºŒè§‰åç§°ä¹±ç "] = 0;
+		xini_file["åŠŸèƒ½é…ç½®"]["é»˜è®¤åˆ›å»ºç¼”é€ è€…"] = 0;
 
-		xini_file["ÑÕÉ«ÅäÖÃ"]["ÆôÓÃ"] = 0;
-		xini_file["ÑÕÉ«ÅäÖÃ"]["½ÇÉ«Ãû³ÆÑÕÉ«"] = "#FFFFFF";
-		xini_file["ÑÕÉ«ÅäÖÃ"]["NPCÃû³ÆÑÕÉ«"] = "#E6C89B"; // Hook
+		xini_file["é¢œè‰²é…ç½®"]["å¯ç”¨"] = 0;
+		xini_file["é¢œè‰²é…ç½®"]["è§’è‰²åç§°é¢œè‰²"] = "#FFFFFF";
+		xini_file["é¢œè‰²é…ç½®"]["NPCåç§°é¢œè‰²"] = "#E6C89B"; // Hook
 
-		xini_file["¼üÎ»ÅäÖÃ"]["ÆôÓÃ"] = 0;
-		xini_file["¼üÎ»ÅäÖÃ"]["HookKey1"] = 55; // Hook²Ëµ¥ID
-		xini_file["¼üÎ»ÅäÖÃ"]["1¼üXÖá"] = 718;
-		xini_file["¼üÎ»ÅäÖÃ"]["1¼üYÖá"] = 520;
-		xini_file["¼üÎ»ÅäÖÃ"]["HookKey2"] = 56; // Hook²Ëµ¥ID
-		xini_file["¼üÎ»ÅäÖÃ"]["2¼üXÖá"] = 718;
-		xini_file["¼üÎ»ÅäÖÃ"]["2¼üYÖá"] = 558;
+		xini_file["é”®ä½é…ç½®"]["å¯ç”¨"] = 0;
+		xini_file["é”®ä½é…ç½®"]["HookKey1"] = 55; // Hookèœå•ID
+		xini_file["é”®ä½é…ç½®"]["1é”®Xè½´"] = 718;
+		xini_file["é”®ä½é…ç½®"]["1é”®Yè½´"] = 520;
+		xini_file["é”®ä½é…ç½®"]["HookKey2"] = 56; // Hookèœå•ID
+		xini_file["é”®ä½é…ç½®"]["2é”®Xè½´"] = 718;
+		xini_file["é”®ä½é…ç½®"]["2é”®Yè½´"] = 558;
 	}
 
-	int openLog = xini_file["ÏµÍ³ÅäÖÃ"]["±¾µØÈÕÖ¾"];
+	int openLog = xini_file["ç³»ç»Ÿé…ç½®"]["æœ¬åœ°æ—¥å¿—"];
 
 	if (openLog == 1) {
 		CreateConsole();
 	}
 
-	LogMessage("Ö´ĞĞÂ·¾¶ %s", config_file);
-	std::string GameHost = (const char*)xini_file["ÏµÍ³ÅäÖÃ"]["·şÎñÆ÷IP"];
-	LogMessage("·şÎñÆ÷IP:" + GameHost, openLog);
-	LogMessage("·şÎñÆ÷IP:%s", GameHost.c_str());
-	xini_file["ÏµÍ³ÅäÖÃ"]["¿Í»§¶Ë°æ±¾"] = version;
+	LogMessage("æ‰§è¡Œè·¯å¾„ %s", config_file);
+	std::string GameHost = (const char*)xini_file["ç³»ç»Ÿé…ç½®"]["æœåŠ¡å™¨IP"];
+	LogMessage("æœåŠ¡å™¨IP:" + GameHost, openLog);
+	LogMessage("æœåŠ¡å™¨IP:%s", GameHost.c_str());
+	xini_file["ç³»ç»Ÿé…ç½®"]["å®¢æˆ·ç«¯ç‰ˆæœ¬"] = version;
 
-	// »ñÈ¡¿Í»§¶Ë°æ±¾ÀàĞÍ
+	// è·å–å®¢æˆ·ç«¯ç‰ˆæœ¬ç±»å‹
 	std::string exeType = getExeType(version);
-	LogMessage("¿Í»§¶Ë°æ±¾:" + exeType, openLog);
-	LogMessage("¿Í»§¶Ë°æ±¾:%s", exeType.c_str());
+	LogMessage("å®¢æˆ·ç«¯ç‰ˆæœ¬:" + exeType, openLog);
+	LogMessage("å®¢æˆ·ç«¯ç‰ˆæœ¬:%s", exeType.c_str());
 
-	int Feature1 = xini_file["¹¦ÄÜÅäÖÃ"]["ÎÄ±¾Õ³ÌùÈ¨ÏŞ"];
-	int Feature2 = xini_file["¹¦ÄÜÅäÖÃ"]["ÓÊ¼şGM±êÊ¶"];
-	int Feature3 = xini_file["¹¦ÄÜÅäÖÃ"]["¹Ø±Õ»Ø¹ºÉÌµê"];
-	int Feature4 = xini_file["¹¦ÄÜÅäÖÃ"]["¼¼ÄÜÀ¸ÏÔÊ¾¼¼ÄÜÃû³Æ"];
-	int Feature5 = xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´233°üÍ·"];
-	int Feature6 = xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´ÒÆ¶¯ÎïÆ·"];
-	int Feature7 = xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´×ÖÄ¸ÏÔÊ¾"];
-	int Feature8 = xini_file["¹¦ÄÜÅäÖÃ"]["½ûÓÃ×îĞ¡»¯ÆäËû´°¿Ú"];
-	int Feature9 = xini_file["¹¦ÄÜÅäÖÃ"]["Ëõ·ÅÓÅ»¯"];
-	int Feature10 = xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´ÁìÖ÷Ö®Ëş"];
-	int Feature11 = xini_file["¹¦ÄÜÅäÖÃ"]["ĞŞ¸´¶ş¾õÃû³ÆÂÒÂë"];
-	int Feature12 = xini_file["¹¦ÄÜÅäÖÃ"]["Ä¬ÈÏ´´½¨µŞÔìÕß"];
-	int Feature13 = xini_file["¹¦ÄÜÅäÖÃ"]["±¾µØGM"];
-	int Feature14 = xini_file["¹¦ÄÜÅäÖÃ"]["×°±¸ÏâÇ¶"];
+	int Feature1 = xini_file["åŠŸèƒ½é…ç½®"]["æ–‡æœ¬ç²˜è´´æƒé™"];
+	int Feature2 = xini_file["åŠŸèƒ½é…ç½®"]["é‚®ä»¶GMæ ‡è¯†"];
+	int Feature3 = xini_file["åŠŸèƒ½é…ç½®"]["å…³é—­å›è´­å•†åº—"];
+	int Feature4 = xini_file["åŠŸèƒ½é…ç½®"]["æŠ€èƒ½æ æ˜¾ç¤ºæŠ€èƒ½åç§°"];
+	int Feature5 = xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤233åŒ…å¤´"];
+	int Feature6 = xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤ç§»åŠ¨ç‰©å“"];
+	int Feature7 = xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤å­—æ¯æ˜¾ç¤º"];
+	int Feature8 = xini_file["åŠŸèƒ½é…ç½®"]["ç¦ç”¨æœ€å°åŒ–å…¶ä»–çª—å£"];
+	int Feature9 = xini_file["åŠŸèƒ½é…ç½®"]["ç¼©æ”¾ä¼˜åŒ–"];
+	int Feature10 = xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤é¢†ä¸»ä¹‹å¡”"];
+	int Feature11 = xini_file["åŠŸèƒ½é…ç½®"]["ä¿®å¤äºŒè§‰åç§°ä¹±ç "];
+	int Feature12 = xini_file["åŠŸèƒ½é…ç½®"]["é»˜è®¤åˆ›å»ºç¼”é€ è€…"];
+	int Feature13 = xini_file["åŠŸèƒ½é…ç½®"]["æœ¬åœ°GM"];
+	int Feature14 = xini_file["åŠŸèƒ½é…ç½®"]["è£…å¤‡é•¶åµŒ"];
 
-	int Feature15 = xini_file["¼üÎ»ÅäÖÃ"]["ÆôÓÃ"];
-	int keyCode1 = xini_file["¼üÎ»ÅäÖÃ"]["HookKey1"];
-	int keyCode2 = xini_file["¼üÎ»ÅäÖÃ"]["HookKey2"];
+	int Feature15 = xini_file["é”®ä½é…ç½®"]["å¯ç”¨"];
+	int keyCode1 = xini_file["é”®ä½é…ç½®"]["HookKey1"];
+	int keyCode2 = xini_file["é”®ä½é…ç½®"]["HookKey2"];
 
-	int keyCode1x = xini_file["¼üÎ»ÅäÖÃ"]["1¼üXÖá"];
-	int keyCode1y = xini_file["¼üÎ»ÅäÖÃ"]["1¼üYÖá"];
-	int keyCode2x = xini_file["¼üÎ»ÅäÖÃ"]["2¼üXÖá"];
-	int keyCode2y = xini_file["¼üÎ»ÅäÖÃ"]["2¼üYÖá"];
+	int keyCode1x = xini_file["é”®ä½é…ç½®"]["1é”®Xè½´"];
+	int keyCode1y = xini_file["é”®ä½é…ç½®"]["1é”®Yè½´"];
+	int keyCode2x = xini_file["é”®ä½é…ç½®"]["2é”®Xè½´"];
+	int keyCode2y = xini_file["é”®ä½é…ç½®"]["2é”®Yè½´"];
 
-	int Feature30 = xini_file["ÏµÍ³ÅäÖÃ"]["HOOKÁÄÌìÏûÏ¢"];
-	int Feature40 = xini_file["ÑÕÉ«ÅäÖÃ"]["ÆôÓÃ"];
-	// NPCÃû³ÆÑÕÉ«
-	std::string NPC_Color = (const char*)xini_file["ÑÕÉ«ÅäÖÃ"]["NPCÃû³ÆÑÕÉ«"];
-	// ½ÇÉ«Ãû³ÆÑÕÉ«
-	std::string Character_Color = (const char*)xini_file["ÑÕÉ«ÅäÖÃ"]["½ÇÉ«Ãû³ÆÑÕÉ«"];
+	int Feature30 = xini_file["ç³»ç»Ÿé…ç½®"]["HOOKèŠå¤©æ¶ˆæ¯"];
+	int Feature40 = xini_file["é¢œè‰²é…ç½®"]["å¯ç”¨"];
+	// NPCåç§°é¢œè‰²
+	std::string NPC_Color = (const char*)xini_file["é¢œè‰²é…ç½®"]["NPCåç§°é¢œè‰²"];
+	// è§’è‰²åç§°é¢œè‰²
+	std::string Character_Color = (const char*)xini_file["é¢œè‰²é…ç½®"]["è§’è‰²åç§°é¢œè‰²"];
 
 	if (Feature1 == 1) {
-		// ¿ªÆô[Ctrl+v]Õ³ÌùÈ¨ÏŞ
+		// å¼€å¯[Ctrl+v]ç²˜è´´æƒé™
 		Gamex::SetClipboardData(exeType);
-		LogMessage("¿ªÆô[Ctrl+v]Õ³ÌùÈ¨ÏŞ");
+		LogMessage("å¼€å¯[Ctrl+v]ç²˜è´´æƒé™");
 	}
 	if (Feature2 == 1) {
-		// ¿ªÆôÌ¨·şDNFÓÊ¼şGM±êÊ¶
+		// å¼€å¯å°æœDNFé‚®ä»¶GMæ ‡è¯†
 		Gamex::FixGMofMail(exeType);
-		LogMessage("¿ªÆôÌ¨·şDNFÓÊ¼şGM±êÊ¶");
+		LogMessage("å¼€å¯å°æœDNFé‚®ä»¶GMæ ‡è¯†");
 	}
 	if (Feature3 == 1) {
-		// ¹Ø±ÕNPCÖØĞÂ»Ø¹º
+		// å…³é—­NPCé‡æ–°å›è´­
 		Gamex::DisableBuyback(exeType);
-		LogMessage("¹Ø±ÕNPCÖØĞÂ»Ø¹º");
+		LogMessage("å…³é—­NPCé‡æ–°å›è´­");
 	}
 	if (Feature4 == 1) {
-		// ¼¼ÄÜÀ¸Ä¬ÈÏÏÔÊ¾¼¼ÄÜÃû³Æ
+		// æŠ€èƒ½æ é»˜è®¤æ˜¾ç¤ºæŠ€èƒ½åç§°
 		Gamex::ShowSkillName(exeType);
-		LogMessage("¼¼ÄÜÀ¸Ä¬ÈÏÏÔÊ¾¼¼ÄÜÃû³Æ");
+		LogMessage("æŠ€èƒ½æ é»˜è®¤æ˜¾ç¤ºæŠ€èƒ½åç§°");
 	}
 	if (Feature5 == 1) {
-		// ĞŞ¸´233°üÍ·Òì³£
+		// ä¿®å¤233åŒ…å¤´å¼‚å¸¸
 		Gamex::FixPackage(exeType);
-		LogMessage("ĞŞ¸´233°üÍ·Òì³£");
+		LogMessage("ä¿®å¤233åŒ…å¤´å¼‚å¸¸");
 	}
 	if (Feature6 == 1) {
-		// ĞŞ¸´ "//ÒÆ¶¯ÎïÆ·" ÃüÁîÖÁ½ÅÏÂ
+		// ä¿®å¤ "//ç§»åŠ¨ç‰©å“" å‘½ä»¤è‡³è„šä¸‹
 		Gamex::FixItemPosCMD(exeType);
-		LogMessage("ĞŞ¸´¡®//ÒÆ¶¯ÎïÆ·¡¯ÃüÁîÖÁ½ÅÏÂ");
+		LogMessage("ä¿®å¤â€˜//ç§»åŠ¨ç‰©å“â€™å‘½ä»¤è‡³è„šä¸‹");
 	}
 	if (Feature7 == 1) {
-		// ĞŞ¸´×ÖÄ¸¡®R¡¯&¡®I¡¯
+		// ä¿®å¤å­—æ¯â€˜Râ€™&â€˜Iâ€™
 		Gamex::FixLetterText(exeType);
-		LogMessage("ĞŞ¸´×ÖÄ¸¡®R¡¯&¡®I¡¯");
+		LogMessage("ä¿®å¤å­—æ¯â€˜Râ€™&â€˜Iâ€™");
 	}
 	if (Feature8 == 1) {
-		// ½ûÓÃÆô¶¯ÓÎÏ·Ê±×îĞ¡»¯ÆäËû´°¿Ú @¹âÍ·´óÀĞ
+		// ç¦ç”¨å¯åŠ¨æ¸¸æˆæ—¶æœ€å°åŒ–å…¶ä»–çª—å£ @å…‰å¤´å¤§ä½¬
 		Gamex::DisableOtherWinMin(exeType);
-		LogMessage("½ûÓÃÆô¶¯ÓÎÏ·Ê±×îĞ¡»¯ÆäËû´°¿Ú");
+		LogMessage("ç¦ç”¨å¯åŠ¨æ¸¸æˆæ—¶æœ€å°åŒ–å…¶ä»–çª—å£");
 	}
 	if (Feature9 == 1) {
-		// Ëõ·ÅÓÅ»¯(È¡Ïû[use zoom rate]±êÇ©¾µÍ·¸úËæ) ¸Ğ¾õ²»Ã÷ÏÔ
+		// ç¼©æ”¾ä¼˜åŒ–(å–æ¶ˆ[use zoom rate]æ ‡ç­¾é•œå¤´è·Ÿéš) æ„Ÿè§‰ä¸æ˜æ˜¾
 		Gamex::FreeZoomRate(exeType);
-		LogMessage("Ëõ·ÅÓÅ»¯(È¡Ïû[use zoom rate]±êÇ©¾µÍ·¸úËæ)");
+		LogMessage("ç¼©æ”¾ä¼˜åŒ–(å–æ¶ˆ[use zoom rate]æ ‡ç­¾é•œå¤´è·Ÿéš)");
 	}
 	if (Feature10 == 1) {
-		// ĞŞ¸´ÁìÖ÷Ö®Ëş 
+		// ä¿®å¤é¢†ä¸»ä¹‹å¡” 
 		Gamex::FixLordTower(exeType);
-		LogMessage("ĞŞ¸´ÁìÖ÷Ö®ËşÍ¨¹Ø·µ»Ø³ÇÕò°ÚÌ¯»ò·Ö½â»ú±ÀÀ£&½áËãÒôĞ§¶à´Î²¥·ÅBUG");
+		LogMessage("ä¿®å¤é¢†ä¸»ä¹‹å¡”é€šå…³è¿”å›åŸé•‡æ‘†æ‘Šæˆ–åˆ†è§£æœºå´©æºƒ&ç»“ç®—éŸ³æ•ˆå¤šæ¬¡æ’­æ”¾BUG");
 	}
 	if (Feature11 == 1) {
-		// ĞŞ¸´½ÇÉ«¶ş¾õÖ°ÒµÃû³ÆÂÒÂë
+		// ä¿®å¤è§’è‰²äºŒè§‰èŒä¸šåç§°ä¹±ç 
 		Gamex::FixCharacterName(exeType);
-		LogMessage("ĞŞ¸´½ÇÉ«¶ş¾õÖ°ÒµÃû³ÆÂÒÂë");
+		LogMessage("ä¿®å¤è§’è‰²äºŒè§‰èŒä¸šåç§°ä¹±ç ");
 	}
 	if (Feature12 == 1) {
-		// Ä¬ÈÏ´´½¨µŞÔìÕß0627 @òĞòĞ
+		// é»˜è®¤åˆ›å»ºç¼”é€ è€…0627 @è›è›
 		Gamex::CreateCreatorMage(exeType);
-		LogMessage("Ä¬ÈÏ´´½¨µŞÔìÕß");
+		LogMessage("é»˜è®¤åˆ›å»ºç¼”é€ è€…");
 	}
 	if (Feature13 == 1) {
-		// ±¾µØGM
+		// æœ¬åœ°GM
 		Gamex::LocalGM_Mode(exeType);
-		LogMessage("¿ªÆô±¾µØGM");
+		LogMessage("å¼€å¯æœ¬åœ°GM");
 	}
 	if (Feature14 == 1) {
-		// ×°±¸+Ê±×°ÏâÇ¶
+		// è£…å¤‡+æ—¶è£…é•¶åµŒ
 		if (exeType == "0627") {
 			Mosaic_0627();
-			LogMessage("Õæ¡¤×°±¸Ê±×°ÏâÇ¶");
+			LogMessage("çœŸÂ·è£…å¤‡æ—¶è£…é•¶åµŒ");
 		}
 	}
 	if (Feature15 == 1) {
-		// 14¼¼ÄÜÀ¸
+		// 14æŠ€èƒ½æ 
 		if (exeType == "0627") {
 			SkilSlot_0627(keyCode1, keyCode2, keyCode1x, keyCode1y, keyCode2x, keyCode2y);
-			LogMessage("Õæ¡¤14¼¼ÄÜÀ¸,Í¬²½ĞŞ¸ÄPVF + Frida");
+			LogMessage("çœŸÂ·14æŠ€èƒ½æ ,åŒæ­¥ä¿®æ”¹PVF + Frida");
 		}
 	}
 
-	// ÉèÖÃNPCÃû³ÆÑÕÉ«
+	// è®¾ç½®NPCåç§°é¢œè‰²
 	if (!NPC_Color.empty() && Feature40 == 1) {
 		Gamex::OverloadNPC_Color(exeType, NPC_Color);
-		LogMessage("ÉèÖÃNPCÃû³ÆÑÕÉ«:%s", NPC_Color.c_str());
+		LogMessage("è®¾ç½®NPCåç§°é¢œè‰²:%s", NPC_Color.c_str());
 	}
-	// ÉèÖÃ½ÇÉ«Ãû³ÆÑÕÉ«
+	// è®¾ç½®è§’è‰²åç§°é¢œè‰²
 	if (!Character_Color.empty() && Feature40 == 1) {
 		Gamex::OverloadCharacter_Color(exeType, Character_Color);
-		LogMessage("ÉèÖÃ½ÇÉ«Ãû³ÆÑÕÉ«:%s", Character_Color.c_str());
+		LogMessage("è®¾ç½®è§’è‰²åç§°é¢œè‰²:%s", Character_Color.c_str());
 	}
-	// HOOKÁÄÌìÏûÏ¢
+	// HOOKèŠå¤©æ¶ˆæ¯
 	if (Feature30 == 1) {
 		Gamex::CommandHook(exeType);
 	}
 }
 
-// ³õÊ¼»¯
+// åˆå§‹åŒ–
 namespace Gamex {
 	void DLL_Main() {
-		// TODO Í¨¹ıdnf.exe»ñÈ¡°æ±¾ĞÅÏ¢ & ÅäÖÃÎÄ¼ş»ñÈ¡
+		// TODO é€šè¿‡dnf.exeè·å–ç‰ˆæœ¬ä¿¡æ¯ & é…ç½®æ–‡ä»¶è·å–
 		loadConfig();
 	}
-	// ĞŞ¸´233°üÍ·Òì³£
+	// ä¿®å¤233åŒ…å¤´å¼‚å¸¸
 	void FixPackage(std::string exeType)
 	{
-		// ×Ö½Ú¼¯ Ğ´
+		// å­—èŠ‚é›† å†™
 		BYTE bAddr[6] = { 0xEB, 0x11, 0x90, 0x90, 0x90, 0x90 };
 		// dx.Writes(0x7539015, static_cast<const void*>(bAddr), sizeof(bAddr));
 
-		// ¼æÈİ0627exe
+		// å…¼å®¹0627exe
 		if (exeType == "0627") {
-			// Ğ´·¨1£ºÊ¹ÓÃMemoryÀà
+			// å†™æ³•1ï¼šä½¿ç”¨Memoryç±»
 			dx.Writes(0x727017, static_cast<const void*>(bAddr), sizeof(bAddr));
-			// Ğ´·¨2£ºÊ¹ÓÃmemcpy
+			// å†™æ³•2ï¼šä½¿ç”¨memcpy
 			// memcpy((void*)0x727017, "\xEB\x11\x90\x90\x90\x90", 6);
 		}
 		else if (exeType == "0725") {
-			// ¼æÈİ0725exe
+			// å…¼å®¹0725exe
 			dx.Writes(0x730947, static_cast<const void*>(bAddr), sizeof(bAddr));
 		}
 		else if (exeType == "1031") {
-			// ¼æÈİ1031exe
+			// å…¼å®¹1031exe
 			dx.Writes(0x7458C7, static_cast<const void*>(bAddr), sizeof(bAddr));
 		}
 	}
 
 
-	// ¹Ø±ÕNPCÖØĞÂ»Ø¹º
+	// å…³é—­NPCé‡æ–°å›è´­
 	void DisableBuyback(std::string exeType) {
 		// 0627 0x00EA8663
 		if (exeType == "0627") {
-			// ĞŞ¸´ÏßÌõ¿ÕÈ±ÎÊÌâ
+			// ä¿®å¤çº¿æ¡ç©ºç¼ºé—®é¢˜
 			WriteCall((void*)0x00EA8631, &my_getLineSize);
-			// ¹Ø±ÕNPCÖØĞÂ»Ø¹º
+			// å…³é—­NPCé‡æ–°å›è´­
 			memcpy((void*)0x00EA8663, "\x66\xC7\x47\x0C\x00\x00\xEB\x4E\x90", 9);
 		}
 	}
 
-	// ¿ªÆô[Ctrl+v]Õ³ÌùÈ¨ÏŞ2.0
+	// å¼€å¯[Ctrl+v]ç²˜è´´æƒé™2.0
 	void SetClipboardData(std::string exeType) {
 		// 0627
 		if (exeType == "0627") {
@@ -247,21 +247,21 @@ namespace Gamex {
 		}
 	}
 
-	// ĞŞ¸´×ÖÄ¸¡®R¡¯&¡®I¡¯
+	// ä¿®å¤å­—æ¯â€˜Râ€™&â€˜Iâ€™
 	void FixLetterText(std::string exeType) {
 		// 0627
 		if (exeType == "0627") {
-			// ĞŞ¸´×ÖÄ¸¡®R¡¯
+			// ä¿®å¤å­—æ¯â€˜Râ€™
 			WriteJmp((void*)0x015319C3, (void*)R_Text1);
 			WriteJmp((void*)0x0150F49F, (void*)R_Text2);
 
-			// ĞŞ¸´×ÖÄ¸¡®I¡¯
+			// ä¿®å¤å­—æ¯â€˜Iâ€™
 			*(BYTE*)0x011EE391 = 0xEB;
 			memcpy((void*)0x011EEDF5, "\xE9\x24\x02\x00\x00\x90", 6);
 		}
 	}
 
-	// Ëõ·ÅÓÅ»¯(È¡Ïû[use zoom rate]±êÇ©¾µÍ·¸úËæ)
+	// ç¼©æ”¾ä¼˜åŒ–(å–æ¶ˆ[use zoom rate]æ ‡ç­¾é•œå¤´è·Ÿéš)
 	void FreeZoomRate(std::string exeType) {
 		// 0627
 		if (exeType == "0627") {
@@ -270,7 +270,7 @@ namespace Gamex {
 		}
 	}
 
-	// ĞŞ¸´ "//ÒÆ¶¯ÎïÆ·" ÃüÁîÖÁ½ÅÏÂ
+	// ä¿®å¤ "//ç§»åŠ¨ç‰©å“" å‘½ä»¤è‡³è„šä¸‹
 	void FixItemPosCMD(std::string exeType) {
 		// 0627
 		if (exeType == "0627") {
@@ -278,55 +278,55 @@ namespace Gamex {
 		}
 	}
 
-	// ¿ªÆôÌ¨·şDNFÓÊ¼şGM±êÊ¶
+	// å¼€å¯å°æœDNFé‚®ä»¶GMæ ‡è¯†
 	void FixGMofMail(std::string exeType) {
-		// 0627ĞŞ¸´ÓÊ¼şGM±êÖ¾
+		// 0627ä¿®å¤é‚®ä»¶GMæ ‡å¿—
 		if (exeType == "0627") {
-			*(char*)0x0094E948 = 16;//Ö¡Êı
+			*(char*)0x0094E948 = 16;//å¸§æ•°
 			// Interface/newstyle/windows/Mail/AddingMailControl.img
 			*(int*)0x0094E94A = 0x015CCE68;
 			WriteJmp((void*)0x00949050, &setGMofMail);
 		}
 	}
 
-	// ¼¼ÄÜÀ¸Ä¬ÈÏÏÔÊ¾¼¼ÄÜÃû³Æ
+	// æŠ€èƒ½æ é»˜è®¤æ˜¾ç¤ºæŠ€èƒ½åç§°
 	void ShowSkillName(std::string exeType) {
 		if (exeType == "0627") {
-			// 0627Ä¬ÈÏ¿ªÆô¼¼ÄÜÃû³Æ
+			// 0627é»˜è®¤å¼€å¯æŠ€èƒ½åç§°
 			*(WORD*)0x006D50FA = 0x12EB;
 		}
 	}
 
-	// ½ûÓÃÆô¶¯ÓÎÏ·Ê±×îĞ¡»¯ÆäËû´°¿Ú @¹âÍ·´óÀĞ
+	// ç¦ç”¨å¯åŠ¨æ¸¸æˆæ—¶æœ€å°åŒ–å…¶ä»–çª—å£ @å…‰å¤´å¤§ä½¬
 	void DisableOtherWinMin(std::string exeType) {
 		if (exeType == "0627") {
 			memset((LPVOID)0x006FC6FC, 0x90, 18);
 		}
 		else if (exeType == "1031") {
 			//memset((LPVOID)0x7199CE, 0x90, 18);
-			//*(char*)0x7199CA = 0xEB; // 10½øÖÆ7444938 ×ª»¯16½øÖÆ 0x7199CA
-			RtlCopyMemory((LPVOID)0x7199CA, "\xEB", 1); // Î´²âÊÔ
+			//*(char*)0x7199CA = 0xEB; // 10è¿›åˆ¶7444938 è½¬åŒ–16è¿›åˆ¶ 0x7199CA
+			RtlCopyMemory((LPVOID)0x7199CA, "\xEB", 1); // æœªæµ‹è¯•
 		}
 	}
 
-	// ĞŞ¸´ÁìÖ÷Ö®Ëş 
+	// ä¿®å¤é¢†ä¸»ä¹‹å¡” 
 	void FixLordTower(std::string exeType) {
 		if (exeType == "0627") {
-			// ĞŞ¸´ÁìÖ÷Ö®ËşÍ¨¹Ø·µ»Ø³ÇÕò°ÚÌ¯»ò·Ö½â»ú±ÀÀ££¨3.0ÓÅ»¯°æ£©
+			// ä¿®å¤é¢†ä¸»ä¹‹å¡”é€šå…³è¿”å›åŸé•‡æ‘†æ‘Šæˆ–åˆ†è§£æœºå´©æºƒï¼ˆ3.0ä¼˜åŒ–ç‰ˆï¼‰
 			WriteJmp((void*)0x00FFDA95, &fixNewBoundingRound);
-			// ĞŞ¸´ÁìÖ÷Ö®Ëş½áËãÒôĞ§¶à´Î²¥·ÅBUG
+			// ä¿®å¤é¢†ä¸»ä¹‹å¡”ç»“ç®—éŸ³æ•ˆå¤šæ¬¡æ’­æ”¾BUG
 			*(char*)0x00436382 = -1;
 		}
 	}
 
-	// ĞŞ¸´½ÇÉ«¶ş¾õÖ°ÒµÃû³ÆÂÒÂë
+	// ä¿®å¤è§’è‰²äºŒè§‰èŒä¸šåç§°ä¹±ç 
 	void FixCharacterName(std::string exeType) {
 		if (exeType == "0627") {
 			*(BYTE*)0x0084995A = 0x8F;
 		}
 	}
 
-	// Ä¬ÈÏ´´½¨µŞÔìÕß0627 @òĞòĞ
+	// é»˜è®¤åˆ›å»ºç¼”é€ è€…0627 @è›è›
 	void CreateCreatorMage(std::string exeType) {
 		if (exeType == "0627") {
 			*(char*)0x10F3338 = 11;
@@ -334,19 +334,19 @@ namespace Gamex {
 		}
 	}
 
-	// ±¾µØGM
+	// æœ¬åœ°GM
 	void LocalGM_Mode(std::string exeType) {
 		if (exeType == "0627") {
-			// Ô­Ê¼ 55 8B EC 51 81 C1 90 03 00 00   -> 03 00 00 ¸Ä 02 08 09
+			// åŸå§‹ 55 8B EC 51 81 C1 90 03 00 00   -> 03 00 00 æ”¹ 02 08 09
 			// memcpy((void*)0x00751830, "\x55\x8B\xEC\x51\x81\xC1\x90\x02\x08\x09", 10);
 			RtlCopyMemory((LPVOID)0x00751830, "\x55\x8B\xEC\x51\x81\xC1\x90\x02\x08\x09", 10);
-			// Ô­Ê¼ 81 C1 90 03 00 00 8D 45 FC 50 8D 03  -> 03 00 00 ¸Ä 02 08 09
+			// åŸå§‹ 81 C1 90 03 00 00 8D 45 FC 50 8D 03  -> 03 00 00 æ”¹ 02 08 09
 			// memcpy((void*)0x00751834, "\x81\xC1\x90\x02\x08\x09\x8D\x45\xFC\x50\x8D", 11);
 			RtlCopyMemory((LPVOID)0x00751834, "\x81\xC1\x90\x02\x08\x09\x8D\x45\xFC\x50\x8D", 11);
 		}
 	}
 
-	// HOOKÁÄÌìÏûÏ¢(ÊÇ·ñÇø·Ö¿Í»§¶Ë°æ±¾?)
+	// HOOKèŠå¤©æ¶ˆæ¯(æ˜¯å¦åŒºåˆ†å®¢æˆ·ç«¯ç‰ˆæœ¬?)
 	void CommandHook(std::string exeType)
 	{
 		if (exeType == "0627") {
@@ -358,24 +358,24 @@ namespace Gamex {
 		}
 	}
 
-	// ÉèÖÃNPCÃû³ÆÑÕÉ«
+	// è®¾ç½®NPCåç§°é¢œè‰²
 	void OverloadNPC_Color(std::string exeType, std::string NPC_Color) {
 		if (exeType == "0627") {
-			// NPCÃû³ÆÑÕÉ«  Ä¬ÈÏÑÕÉ« E6 C8 9B FF
+			// NPCåç§°é¢œè‰²  é»˜è®¤é¢œè‰² E6 C8 9B FF
 			// memcpy((void*)0x007E9279, "\x39\x96\x5b", 3);
 			// BYTE cAddr[3] = { 0xF3, 0x4B, 0x7D };
 			// dx.Writes(0x007E9279, static_cast<const void*>(cAddr), sizeof(cAddr));
 
-			// »ñÈ¡vectorÑÕÉ«BYTE
+			// è·å–vectoré¢œè‰²BYTE
 			std::vector<BYTE> vectorColors = VectorToBytes(NPC_Color);
 			WriteVectorBytes((void*)0x007E9279, vectorColors);
 		}
 	}
 
-	// ÉèÖÃ½ÇÉ«Ãû³ÆÑÕÉ«[CE¿ÉHOOKÑÕÉ«£¬ÍÆ²âĞèÒª½ÇÉ«µÇÂ¼ºó´¦Àí]
+	// è®¾ç½®è§’è‰²åç§°é¢œè‰²[CEå¯HOOKé¢œè‰²ï¼Œæ¨æµ‹éœ€è¦è§’è‰²ç™»å½•åå¤„ç†]
 	void OverloadCharacter_Color(std::string exeType, std::string Character_Color) {
 		if (exeType == "0627") {
-			// ½ÇÉ«Ãû³ÆÑÕÉ«  Ä¬ÈÏÑÕÉ« FF FF FF FF
+			// è§’è‰²åç§°é¢œè‰²  é»˜è®¤é¢œè‰² FF FF FF FF
 			std::vector<uint8_t> characterBytes = hexStringToByteArray(Character_Color);
 			if (characterBytes.size() == 3) {
 				BYTE chAddr[3] = { 0 };
@@ -388,4 +388,5 @@ namespace Gamex {
 		}
 	}
 };
+
 

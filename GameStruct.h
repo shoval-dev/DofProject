@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Game.h"
 
 struct Character
@@ -8,9 +8,9 @@ struct Character
 	FLOAT X;
 	FLOAT Y;
 	FLOAT Z;
-	DWORD State; // ÈËÎï×´Ì¬ 1½ÖÉÏ 2¼ÓÔØ/Ñ¡Ôñ¸±±¾ 3¸±±¾Àï
-	DWORD RoomX; // ¸±±¾·¿¼äX×ø±ê
-	DWORD RoomY; // ¸±±¾·¿¼äY×ø±ê
+	DWORD State; // äººç‰©çŠ¶æ€ 1è¡—ä¸Š 2åŠ è½½/é€‰æ‹©å‰¯æœ¬ 3å‰¯æœ¬é‡Œ
+	DWORD RoomX; // å‰¯æœ¬æˆ¿é—´Xåæ ‡
+	DWORD RoomY; // å‰¯æœ¬æˆ¿é—´Yåæ ‡
 };
 
 class GameStruct

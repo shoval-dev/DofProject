@@ -1,49 +1,49 @@
-#pragma once
+ï»¿#pragma once
 #include "Hook.h"
 #include "GameStruct.h"
 #include "CLVEH.h"
 #include "Hotkey.h"
 
-GameStruct gameStruct; // ³õÊ¼»¯½ÇÉ«ĞÅÏ¢½á¹¹Ìå
+GameStruct gameStruct; // åˆå§‹åŒ–è§’è‰²ä¿¡æ¯ç»“æ„ä½“
 HOTKEY_ID vkid_F4 = 0;
 
-// 0627¹Ø±ÕNPCÖØĞÂ»Ø¹ººóĞŞ¸´ÏßÌõ¿ÕÈ±ÎÊÌâ @òĞòĞ´óÀĞ Ìá¹©
+// 0627å…³é—­NPCé‡æ–°å›è´­åä¿®å¤çº¿æ¡ç©ºç¼ºé—®é¢˜ @è›è›å¤§ä½¬ æä¾›
 typedef int(__thiscall* _getLineSize_t)(uint32_t*);
 typedef uint32_t* (__thiscall* _getRedeemCUI_t)(uint32_t*, int);
 _getLineSize_t getLineSize = (_getLineSize_t)0x011B5E80;
 _getRedeemCUI_t getRedeemCUI = (_getRedeemCUI_t)0x011B5C80;
 int __fastcall my_getLineSize(uint32_t* pthis)
 {
-	int length = getLineSize(pthis);
-	int num = (*(uint32_t*)(pthis[175] + 36) - *(uint32_t*)(pthis[175] + 32)) >> 2; // MaxIndex
-	uint32_t* page = getRedeemCUI(pthis, num - 1);
-	if (page)
-		length -= page[14]; // Weight
-	return length;
+    int length = getLineSize(pthis);
+    int num = (*(uint32_t*)(pthis[175] + 36) - *(uint32_t*)(pthis[175] + 32)) >> 2; // MaxIndex
+    uint32_t* page = getRedeemCUI(pthis, num - 1);
+    if (page)
+        length -= page[14]; // Weight
+    return length;
 }
 
-// ĞŞ¸´×ÖÄ¸¡®R¡¯
+// ä¿®å¤å­—æ¯â€˜Râ€™
 static const wchar_t* text_R = L"R";
 Naked void R_Text1()
 {
-	_asm {
-		mov eax, text_R
-		mov dword ptr ds : [0x01B47208] , eax
-		mov eax, 0x015319C8
-		jmp eax
-	}
+    _asm {
+        mov eax, text_R
+        mov dword ptr ds:[0x01B47208], eax
+        mov eax, 0x015319C8
+        jmp eax
+    }
 }
 Naked void R_Text2()
 {
-	_asm {
-		mov eax, text_R
-		mov dword ptr ds : [0x01ADE05C] , eax
-		mov eax, 0x0150F4A4
-		jmp eax
-	}
+    _asm {
+        mov eax, text_R
+        mov dword ptr ds:[0x01ADE05C], eax
+        mov eax, 0x0150F4A4
+        jmp eax
+    }
 }
 
-// ĞŞ¸´ "//ÒÆ¶¯ÎïÆ·" ÃüÁîÖÁ½ÅÏÂ
+// ä¿®å¤ "//ç§»åŠ¨ç‰©å“" å‘½ä»¤è‡³è„šä¸‹
 typedef int(__thiscall* _getXPos)(void*);
 typedef int(__thiscall* _getYPos)(void*);
 typedef bool(__thiscall* _isObjectType)(DWORD*, int);
@@ -60,237 +60,239 @@ _sq_SetCurrentPos sq_SetCurrentPos = (_sq_SetCurrentPos)0xBA8680;
 _getCollisionObject getCollisionObject = (_getCollisionObject)0x403A80;
 _getCollisionObjectNumber getCollisionObjectNumber = (_getCollisionObjectNumber)0x403AB0;
 
-// ·½·¨Ò»£º ¿ÉÔÚ¸±±¾ÄÚÎŞÏŞÊ¹ÓÃ ¡°//ÒÆ¶¯ÎïÆ·¡± ÃüÁî
+// æ–¹æ³•ä¸€ï¼š å¯åœ¨å‰¯æœ¬å†…æ— é™ä½¿ç”¨ â€œ//ç§»åŠ¨ç‰©å“â€ å‘½ä»¤
 bool __fastcall my_setItemPosCMD1(DWORD* pthis)
 {
-	DWORD* objectManager = getObjectManager(pthis);
-	for (int i = 0; i < getCollisionObjectNumber(objectManager); i++)
-	{
-		DWORD* collisionObject = getCollisionObject(objectManager, i);
-		if (collisionObject && isObjectType(collisionObject, 289)) //0BJECTTYPE ITEM <- 289
-		{
-			sq_SetCurrentPos(collisionObject, getXPos(pthis), getYPos(pthis), 0);
-		}
-	}
-	return true;
+    DWORD* objectManager = getObjectManager(pthis);
+    for (int i = 0; i < getCollisionObjectNumber(objectManager); i++)
+    {
+        DWORD* collisionObject = getCollisionObject(objectManager, i);
+        if (collisionObject && isObjectType(collisionObject, 289)) // OBJECTTYPE ITEM <- 289
+        {
+            sq_SetCurrentPos(collisionObject, getXPos(pthis), getYPos(pthis), 0);
+        }
+    }
+    return true;
 }
 
-// ·½·¨¶ş£º Ê¹ÓÃÒ»´Î
-// ÈôÃüÁîÎŞĞ§£¬Çë¼ì²é²¢ºËÊµµ±Ç°exe×Ö·û´®±àºÅÄÚÈİ 13018>//ÒÆ¶¯ÎïÆ·
+// æ–¹æ³•äºŒï¼š ä½¿ç”¨ä¸€æ¬¡
+// è‹¥å‘½ä»¤æ— æ•ˆï¼Œè¯·æ£€æŸ¥å¹¶æ ¸å®å½“å‰exeå­—ç¬¦ä¸²ç¼–å·å†…å®¹ 13018>//ç§»åŠ¨ç‰©å“
 typedef bool(__thiscall* _setItemPos)(DWORD*);
 _setItemPos setItemPos = (_setItemPos)0x0222EB06;
 bool __fastcall my_setItemPosCMD2(DWORD* pthis)
 {
-
-	pthis[5277] = getXPos(pthis);
-	pthis[5278] = getYPos(pthis);
-	return setItemPos(pthis);
+    pthis[5277] = getXPos(pthis);
+    pthis[5278] = getYPos(pthis);
+    return setItemPos(pthis);
 }
 
-// ¿ªÆôÌ¨·şDNFÓÊ¼şGM±êÊ¶
+// å¼€å¯å°æœDNFé‚®ä»¶GMæ ‡è¯†
 typedef LPCWSTR(__thiscall* _getMailName)(DWORD*);
 _getMailName getMailName = (_getMailName)0x9493B0;
 static bool __fastcall setGMofMail(DWORD* pthis)
 {
-	LPCWSTR MailName = getMailName(pthis);
-	if (wcscmp(L"GM", MailName) == 0 || wcscmp(L"Ã°ÏÕ¼ÒÊÕ", MailName) == 0 || wcscmp(L"DNF¹ÜÀíÔ±", MailName) == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    LPCWSTR MailName = getMailName(pthis);
+    if (wcscmp(L"GM", MailName) == 0 || wcscmp(L"å†’é™©å®¶æ”¶", MailName) == 0 || wcscmp(L"DNFç®¡ç†å‘˜", MailName) == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-// 0627ĞŞ¸´ÁìÖ÷Ö®ËşÍ¨¹Ø·µ»Ø³ÇÕò°ÚÌ¯»ò·Ö½â»ú±ÀÀ££¨3.0ÓÅ»¯°æ£©
+// 0627ä¿®å¤é¢†ä¸»ä¹‹å¡”é€šå…³è¿”å›åŸé•‡æ‘†æ‘Šæˆ–åˆ†è§£æœºå´©æºƒï¼ˆ3.0ä¼˜åŒ–ç‰ˆï¼‰
 Naked void fixNewBoundingRound() {
-	_asm {
-		mov eax, 0x006FC760
-		call eax
-		mov ebx, [eax + 0xB0]
-		cmp dword ptr ds : [ebx + 0x2A0] , 13
-		jne label1
-		mov dword ptr ds : [ebx + 0x2A0] , -1
-		label1 :
-		mov ecx, eax
-		mov eax, 0x007529F0
-		call eax
-		mov eax, [eax + 0x4C]
-		cmp eax, 0
-		je label2
-		mov edi, dword ptr ds : [eax + 0x644]
-		push 0x00FFDAAA
-		ret
-		label2 :
-		push 0x00FFDB0C
-			ret
-	}
+    _asm {
+        mov eax, 0x006FC760
+        call eax
+        mov ebx, [eax + 0xB0]
+        cmp dword ptr ds:[ebx + 0x2A0], 13
+        jne label1
+        mov dword ptr ds:[ebx + 0x2A0], -1
+    label1:
+        mov ecx, eax
+        mov eax, 0x007529F0
+        call eax
+        mov eax, [eax + 0x4C]
+        cmp eax, 0
+        je label2
+        mov edi, dword ptr ds:[eax + 0x644]
+        push 0x00FFDAAA
+        ret
+    label2:
+        push 0x00FFDB0C
+        ret
+    }
 }
 
-// 0627Ä¬ÈÏ´´½¨µŞÔìÕß
+// 0627é»˜è®¤åˆ›å»ºç¼”é€ è€…
 Naked void DefaultCharacter() {
-	static DWORD pfCha_ret = 0x010F3347;
-	_asm {
-		cmp dword ptr ds : [0x01A5FE1C] , 0x01
-		jae label1
-		mov eax, 0xA
-		label1 :
-		mov DWORD PTR ds : [esi + 0xC0] , eax
-		jmp pfCha_ret
-	}
+    static DWORD pfCha_ret = 0x010F3347;
+    _asm {
+        cmp dword ptr ds:[0x01A5FE1C], 0x01
+        jae label1
+        mov eax, 0xA
+    label1:
+        mov DWORD PTR ds:[esi + 0xC0], eax
+        jmp pfCha_ret
+    }
 }
 
-// ¶ÏµãµÄ´¦Àíº¯Êı
+// æ–­ç‚¹çš„å¤„ç†å‡½æ•°
 void hookCallBackFun(_EXCEPTION_POINTERS* ExceptionInfo) {
-	// EIP(µ±Ç°HOOKµÄµØÖ·)
-	LogMessage("VEH -> EIP=%X£¬ECX=%X£¬EDX=%X£¬²ÎÊı1=%X", ExceptionInfo->ContextRecord->Eip, ExceptionInfo->ContextRecord->Ecx, ExceptionInfo->ContextRecord->Edx, ReadDword(ExceptionInfo->ContextRecord->Esp + 4));
+    // EIP(å½“å‰HOOKçš„åœ°å€)
+    LogMessage("VEH -> EIP=%Xï¼ŒECX=%Xï¼ŒEDX=%Xï¼Œå‚æ•°1=%X",
+        ExceptionInfo->ContextRecord->Eip,
+        ExceptionInfo->ContextRecord->Ecx,
+        ExceptionInfo->ContextRecord->Edx,
+        ReadDword(ExceptionInfo->ContextRecord->Esp + 4));
 }
 
-// ÈÈ¼üF4´¥·¢»Øµ÷
+// çƒ­é”®F4è§¦å‘å›è°ƒ
 void InjectHotKey() {
-	gameStruct.ReleaseSkill();
-	LogMessage("HotKey:[%s]´¥·¢ÁË", "F4");
+    gameStruct.ReleaseSkill();
+    LogMessage("HotKey:[%s]è§¦å‘äº†", "F4");
 }
 
-// 0627 HOOKÁÄÌìÏûÏ¢
+// 0627 HOOKèŠå¤©æ¶ˆæ¯
 using _send_gcommand = INT(*)(PCWCHAR str);
 const _send_gcommand send_gcommand = (_send_gcommand)0x951620;
 INT sendCommand(PCWCHAR str, INT type)
 {
-	//wchar_t buffer[64];
-	//formatAndConcat(buffer, _countof(buffer), L"CALLÄãºÃ", characterName);
-	//send_notice(L"CALL", rgb(249, 38, 114), 37);
-	//LogMessage(characterName, 1);
-	/*char* pNewBuffer = UnicodeToAnsi(characterName);
-	LogMessage(pNewBuffer, 1);*/
+    //wchar_t buffer[64];
+    //formatAndConcat(buffer, _countof(buffer), L"CALLä½ å¥½", characterName);
+    //send_notice(L"CALL", rgb(249, 38, 114), 37);
+    //LogMessage(characterName, 1);
+    /*char* pNewBuffer = UnicodeToAnsi(characterName);
+    LogMessage(pNewBuffer, 1);*/
 
-	// Êä³öÈÕÖ¾(¿Í»§¶ËÊäÈëÄÚÈİ)
-	LogMessage(str, 1);
-	// Êä³ö¿ØÖÆÌ¨ÈÕÖ¾
-	LogMessage(UnicodeToAnsi(str));
-	// ÅĞ¶ÏstrÇ°Á½¸ö×Ö·ûÊÇ·ñµÈÓÚ'//'ÏàµÈ·µ»Ø0
-	if (wcsncmp(L"//", str, 2) == 0)
-	{
-		// TEST »ñÈ¡½ÇÉ«Ãû³Æ
-		if (wcsncmp(L"//GET NAME", str, 10) == 0) {
-			// TCHAR characterName[64] = { 0 };
-			// ReadMemoryBytes(characterName, readVal(readVal(CHARACTER_BASE) + 0x258), 32);
+    // è¾“å‡ºæ—¥å¿—(å®¢æˆ·ç«¯è¾“å…¥å†…å®¹)
+    LogMessage(str, 1);
+    // è¾“å‡ºæ§åˆ¶å°æ—¥å¿—
+    LogMessage(UnicodeToAnsi(str));
+    // åˆ¤æ–­strå‰ä¸¤ä¸ªå­—ç¬¦æ˜¯å¦ç­‰äº'//'ç›¸ç­‰è¿”å›0
+    if (wcsncmp(L"//", str, 2) == 0)
+    {
+        // TEST è·å–è§’è‰²åç§°
+        if (wcsncmp(L"//GET NAME", str, 10) == 0) {
+            // TCHAR characterName[64] = { 0 };
+            // ReadMemoryBytes(characterName, readVal(readVal(CHARACTER_BASE) + 0x258), 32);
 
-			wchar_t buffer[64];
-			formatAndConcatSafe(buffer, sizeof(buffer), L"CALL %ls", gameStruct.GetName());
-			// #f92672
-			GameCall::SendText(buffer, rgb(249, 38, 114), 37);
-			return 1;
-		}
+            wchar_t buffer[64];
+            formatAndConcatSafe(buffer, sizeof(buffer), L"CALL %ls", gameStruct.GetName());
+            // #f92672
+            GameCall::SendText(buffer, rgb(249, 38, 114), 37);
+            return 1;
+        }
 
-		// TEST HOOK£¨//HOOK£©¿ªÆôVEH HOOK
-		if (wcsncmp(L"//HOOK", str, 6) == 0) {
-			GameCall::SendText(L"HOOK¿ªÆô³É¹¦", rgb(249, 38, 114), 37);
+        // TEST HOOKï¼ˆ//HOOKï¼‰å¼€å¯VEH HOOK
+        if (wcsncmp(L"//HOOK", str, 6) == 0) {
+            GameCall::SendText(L"HOOKå¼€å¯æˆåŠŸ", rgb(249, 38, 114), 37);
 
-			// µ÷ÓÃAddVehÌí¼Ó
-			// CCLVEH::Instance()->AddVeh(const_cast<char*>("hook1"), 0, 0, SEND_CALL, 1, 0, hookCallBackFun); // ·¢°üCALL
-			CCLVEH::Instance()->AddVeh(const_cast<char*>("hook2"), 0, 0, CACHE_CALL, 1, 0, hookCallBackFun); // »º³åCALL
-			CCLVEH::Instance()->AddVeh(const_cast<char*>("hook3"), 0, 0, ENCRYPT_CALL1, 1, 0, hookCallBackFun); // ¼ÓÃÜCALL1
-			CCLVEH::Instance()->AddVeh(const_cast<char*>("hook4"), 0, 0, ENCRYPT_CALL2, 1, 0, hookCallBackFun); // ¼ÓÃÜCALL2
-			CCLVEH::Instance()->AddVeh(const_cast<char*>("hook5"), 0, 0, ENCRYPT_CALL4, 1, 0, hookCallBackFun); // ¼ÓÃÜCALL4
+            // è°ƒç”¨AddVehæ·»åŠ 
+            // CCLVEH::Instance()->AddVeh(const_cast<char*>("hook1"), 0, 0, SEND_CALL, 1, 0, hookCallBackFun); // å‘åŒ…CALL
+            CCLVEH::Instance()->AddVeh(const_cast<char*>("hook2"), 0, 0, CACHE_CALL, 1, 0, hookCallBackFun);      // ç¼“å†²CALL
+            CCLVEH::Instance()->AddVeh(const_cast<char*>("hook3"), 0, 0, ENCRYPT_CALL1, 1, 0, hookCallBackFun);   // åŠ å¯†CALL1
+            CCLVEH::Instance()->AddVeh(const_cast<char*>("hook4"), 0, 0, ENCRYPT_CALL2, 1, 0, hookCallBackFun);   // åŠ å¯†CALL2
+            CCLVEH::Instance()->AddVeh(const_cast<char*>("hook5"), 0, 0, ENCRYPT_CALL4, 1, 0, hookCallBackFun);   // åŠ å¯†CALL4
 
-			// ÏÂ¶Ïµã
-			CCLVEH::Instance()->InitVeh();
-			return 1;
-		}
+            // ä¸‹æ–­ç‚¹
+            CCLVEH::Instance()->InitVeh();
+            return 1;
+        }
 
-		// TEST UNHOOK£¨//UNHOOK£©¹Ø±ÕVEH HOOK,Ñ¡Ôñ½ÇÉ«Ç°±ØĞëÊÖ¶¯¹Ø±Õ
-		if (wcsncmp(L"//UNHOOK", str, 8) == 0) {
-			GameCall::SendText(L"HOOK¹Ø±Õ³É¹¦", rgb(249, 38, 114), 37);
-			// ¹Ø±Õ¶Ïµã
-			CCLVEH::Instance()->ExitVeh();
-			return 1;
-		}
+        // TEST UNHOOKï¼ˆ//UNHOOKï¼‰å…³é—­VEH HOOK,é€‰æ‹©è§’è‰²å‰å¿…é¡»æ‰‹åŠ¨å…³é—­
+        if (wcsncmp(L"//UNHOOK", str, 8) == 0) {
+            GameCall::SendText(L"HOOKå…³é—­æˆåŠŸ", rgb(249, 38, 114), 37);
+            // å…³é—­æ–­ç‚¹
+            CCLVEH::Instance()->ExitVeh();
+            return 1;
+        }
 
-		// TEST ¿ªÆôF4ÈÈ¼ü(//HOTKEY)
-		if (wcsncmp(L"//HOTKEY", str, 8) == 0) {
-			GameCall::SendText(L"ÈÈ¼üF4¿ªÆô³É¹¦", rgb(249, 38, 114), 37);
-			vkid_F4 = HotkeyMonitor((PFUNC)&InjectHotKey, VK_F4);
-			return 1;
-		}
+        // TEST å¼€å¯F4çƒ­é”®(//HOTKEY)
+        if (wcsncmp(L"//HOTKEY", str, 8) == 0) {
+            GameCall::SendText(L"çƒ­é”®F4å¼€å¯æˆåŠŸ", rgb(249, 38, 114), 37);
+            vkid_F4 = HotkeyMonitor((PFUNC)&InjectHotKey, VK_F4);
+            return 1;
+        }
 
-		// TEST ¹Ø±ÕF4ÈÈ¼ü(//UNHOTKEY)
-		if (wcsncmp(L"//UNHOTKEY", str, 10) == 0) {
-			GameCall::SendText(L"ÈÈ¼üF4¹Ø±Õ³É¹¦", rgb(249, 38, 114), 37);
-			HotKeyUnMonitor(vkid_F4);
-			return 1;
-		}
+        // TEST å…³é—­F4çƒ­é”®(//UNHOTKEY)
+        if (wcsncmp(L"//UNHOTKEY", str, 10) == 0) {
+            GameCall::SendText(L"çƒ­é”®F4å…³é—­æˆåŠŸ", rgb(249, 38, 114), 37);
+            HotKeyUnMonitor(vkid_F4);
+            return 1;
+        }
 
+        // TEST å–Šè¯å†…å®¹ï¼ˆ//SHOUT [å†…å®¹]ï¼‰
+        if (wcsncmp(L"//SHOUT", str, 7) == 0) {
+            size_t length = std::wcslen(str);
+            // åˆ›å»ºä¸€ä¸ªstd::wstringå¯¹è±¡
+            std::wstring wstr(str, length);
+            std::wstring _str = wstr.substr(7);
+            const wchar_t* pwchar_str = _str.c_str();
+            GameCall::Shout(pwchar_str);
+            return 1;
+        }
 
-		// TEST º°»°ÄÚÈİ£¨//SHOUT [ÄÚÈİ]£©
-		if (wcsncmp(L"//SHOUT", str, 7) == 0) {
-			size_t length = std::wcslen(str);
-			// ´´½¨Ò»¸östd::wstring¶ÔÏó
-			std::wstring wstr(str, length);
-			std::wstring _str = wstr.substr(7);
-			const wchar_t* pwchar_str = _str.c_str();
-			GameCall::Shout(pwchar_str);
-			return 1;
-		}
+        // TEST è·å–è§’è‰²ä¿¡æ¯
+        if (wcsncmp(L"//GET STATE", str, 11) == 0) {
+            gameStruct.Load();
+            return 1;
+        }
 
-		// TEST »ñÈ¡½ÇÉ«ĞÅÏ¢
-		if (wcsncmp(L"//GET STATE", str, 11) == 0) {
-			gameStruct.Load();
-			return 1;
-		}
+        // TEST åœ°ä¸‹åŸä¸­ä½¿ç”¨è¯å‰‚
+        if (wcsncmp(L"//USE", str, 5) == 0) {
+            gameStruct.UseDungeonItem();
+            return 1;
+        }
 
-		// TEST µØÏÂ³ÇÖĞÊ¹ÓÃÒ©¼Á
-		if (wcsncmp(L"//USE", str, 5) == 0) {
-			gameStruct.UseDungeonItem();
-			return 1;
-		}
+        // TEST é‡Šæ”¾æŠ€èƒ½ï¼ˆæŠ€èƒ½ä»£ç  ä¼¤å®³ï¼‰
+        if (wcsncmp(L"//SKILL", str, 7) == 0) {
+            //SKILL 22228 1
+            int _skillId = 22228;  // ç”·æœºæ¢°è§‰é†’22228 ä¸‡åšå†³[æ— æ³•è°ƒä¼¤å®³]30567  é‡å­çˆ†å¼¹çˆ†ç‚¸22206
+            int _injury  = 999999; // ä¼¤å®³999999
+            size_t length = std::wcslen(str);
+            // åˆ›å»ºä¸€ä¸ªstd::wstringå¯¹è±¡
+            std::wstring wstr(str, length);
+            std::wstring _str = wstr.substr(7);
+            // è¿‡æ»¤strä¸¤ç«¯çš„ç©ºæ ¼
+            std::wstring trimStr = trim(_str);
+            // åˆ›å»ºä¸€ä¸ªè¾“å…¥å­—ç¬¦ä¸²æµ
+            std::vector<std::wstring> tokens = splitStrW(trimStr);
 
-		// TEST ÊÍ·Å¼¼ÄÜ£¨¼¼ÄÜ´úÂë ÉËº¦£©
-		if (wcsncmp(L"//SKILL", str, 7) == 0) {
-			//SKILL 22228 1
-			int _skillId = 22228; // ÄĞ»úĞµ¾õĞÑ22228 Íò¼á¾ö[ÎŞ·¨µ÷ÉËº¦]30567  Á¿×Ó±¬µ¯±¬Õ¨22206
-			int _injury = 999999; // ÉËº¦999999
-			size_t length = std::wcslen(str);
-			// ´´½¨Ò»¸östd::wstring¶ÔÏó
-			std::wstring wstr(str, length);
-			std::wstring _str = wstr.substr(7);
-			// ¹ıÂËstrÁ½¶ËµÄ¿Õ¸ñ
-			std::wstring trimStr = trim(_str);
-			// ´´½¨Ò»¸öÊäÈë×Ö·û´®Á÷
-			std::vector<std::wstring> tokens = splitStrW(trimStr);
+            if (tokens.size() == 2) {
+                // ä½¿ç”¨std::stoiå°†å®½å­—ç¬¦å­—ç¬¦ä¸²è½¬æ¢ä¸ºint
+                const wchar_t* skillId = tokens[0].c_str();
+                const wchar_t* injury  = tokens[1].c_str();
 
-			if (tokens.size() == 2) {
-				// Ê¹ÓÃstd::stoi½«¿í×Ö·û×Ö·û´®×ª»»Îªint
-				const wchar_t* skillId = tokens[0].c_str();
-				const wchar_t* injury = tokens[1].c_str();
+                // è·å–æŠ€èƒ½
+                if (skillId != nullptr && isNumberW(skillId))
+                {
+                    _skillId = std::stoi(skillId, nullptr, 10); // å‚æ•°3 10åè¿›åˆ¶
+                    LogMessage("æŠ€èƒ½skillId:[%d]", (int*)_skillId);
+                }
 
-				// »ñÈ¡¼¼ÄÜ
-				if (skillId != nullptr && isNumberW(skillId))
-				{
-					_skillId = std::stoi(skillId, nullptr, 10); // ²ÎÊı3 10Ê®½øÖÆ
-					LogMessage("¼¼ÄÜskillId:[%d]", (int*)_skillId);
-				}
+                // è·å–ä¼¤å®³
+                if (injury != nullptr && isNumberW(injury))
+                {
+                    _injury = std::stoi(injury, nullptr, 10); // å‚æ•°3 10åè¿›åˆ¶
+                    LogMessage("ä¼¤å®³injury:[%d]", (int*)_injury);
+                }
+            }
+            LogMessage("æŠ€èƒ½[%d] ä¼¤å®³[%d]", (int*)_skillId, (int*)_injury);
+            gameStruct.ReleaseSkill(_skillId, _injury);
+            return 1;
+        }
 
-				// »ñÈ¡ÉËº¦
-				if (injury != nullptr && isNumberW(injury))
-				{
-					_injury = std::stoi(injury, nullptr, 10); // ²ÎÊı3 10Ê®½øÖÆ
-					LogMessage("ÉËº¦injury:[%d]", (int*)_injury);
-				}
-			}
-			LogMessage("¼¼ÄÜ[%d] ÉËº¦[%d]", (int*)_skillId, (int*)_injury);
-			gameStruct.ReleaseSkill(_skillId, _injury);
-			return 1;
-		}
+        return send_gcommand(str);
+    }
 
-		return send_gcommand(str);
-	}
-
-	//if (!wcsncmp(L"//dofile ", str, 9))
-	//{
-	//	// TODO
-	//	return 1;
-	//}
-	return send_gcommand(str);
+    //if (!wcsncmp(L"//dofile ", str, 9))
+    //{
+    //    // TODO
+    //    return 1;
+    //}
+    return send_gcommand(str);
 }

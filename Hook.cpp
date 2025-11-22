@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Hook.h"
 
 void WriteJmp(void* pfn, void* pCallback) {

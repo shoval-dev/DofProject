@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Hook.h"
 
 Naked void _627_Hook_916024() {
@@ -25,8 +25,8 @@ Naked void _627_Hook_915FD9() {
 
 }
 
-INT keyCode_1 = 55; // ��չ1��λ ��λCode
-INT keyCode_2 = 56; // ��չ2��λ ��λCode
+INT keyCode_1 = 55; // 拓展1槽位 键位Code
+INT keyCode_2 = 56; // 拓展2槽位 键位Code
 
 int _627_call_965130 = 0x00965130;
 int _627_call_9673C0 = 0x009673C0;
@@ -173,11 +173,11 @@ Naked void _627_Hook_6C8CEA() {
 			push 0x006C8CF6
 			ret
 			labnl3 :
-		mov esi, keyCode_1 //pvf������ CTRL
+		mov esi, keyCode_1 //pvf键代码 CTRL
 			push 0x006C8D1A
 			ret
 			labnl4 :
-		mov esi, keyCode_2 //pvf������ ATL
+		mov esi, keyCode_2 //pvf键代码 ATL
 			push 0x006C8D1A
 			ret
 	}
@@ -274,14 +274,14 @@ Naked void _627_Call_11B4030() {
 			mov dword ptr ds : [ecx + 0x20] , esi
 			cmp eax, 531
 			jne labn17x1
-			add edx, 33//����һ�в�λ��X���ƶ�33������
-			cmp edx, 800//����һ�е��߸���λ�ƶ�������һ�е��߲�λ
+			add edx, 33//下面一行槽位的X轴移动33个像素
+			cmp edx, 800//下面一行第七个槽位移动到上面一行第七槽位
 			jne labn17x1
 			mov eax, 497
 			mov edx, 767//767
 			jmp labnl7x
 			labn17x1 :
-		cmp edx, 767//����һ�е��߸���λ�ƶ�������һ�е�һ��λ��
+		cmp edx, 767//上面一行第七个槽位移动到下面一行第一个位置
 			jne labnl7x
 			cmp eax, 497//497
 			jne labnl7x
@@ -390,25 +390,25 @@ Naked void _627_Hook_11B4410() {
 		ret
 	}
 }
-INT _627_7_slot_x = 718;//��չ1��λX������
-INT _627_7_slot_y = 520;//��չ1��λY������
-INT _627_8_slot_x = 718;//��չ2��λX������
-INT _627_8_slot_y = 558;//��չ2��λY������
+INT _627_7_slot_x = 718;//拓展1槽位X轴坐标
+INT _627_7_slot_y = 520;//拓展1槽位Y轴坐标
+INT _627_8_slot_x = 718;//拓展2槽位X轴坐标
+INT _627_8_slot_y = 558;//拓展2槽位Y轴坐标
 Naked void _627_Hook_4CDCDC() {
 	_asm {
 		cmp ebx, 718
 		jne labnl1
 		push 0x1
-		push _627_7_slot_y //y��
-		push _627_7_slot_x //x��
+		push _627_7_slot_y //y轴
+		push _627_7_slot_x //x轴
 		push 0x0004CDCE4
 		ret
 		labnl1 :
 		cmp ebx, 748
 			jne labnl2
 			push 0x1
-			push _627_8_slot_y //y��
-			push _627_8_slot_x //x��
+			push _627_8_slot_y //y轴
+			push _627_8_slot_x //x轴
 			push 0x0004CDCE4
 			ret
 			labnl2 :
@@ -534,43 +534,43 @@ Naked void _627_Hook_9160C4() {
 
 
 void __fastcall SkilSlot_0627(int keyCode1, int keyCode2, int keyCode1x, int keyCode1y, int keyCode2x, int keyCode2y) {
-	// ���¸�ֵ��λ&������Ϣ
-	keyCode_1 = keyCode1; // ��չ1��λ ��λCode
-	keyCode_2 = keyCode2; // ��չ2��λ ��λCode
+	// 重新赋值键位&坐标信息
+	keyCode_1 = keyCode1; // 拓展1槽位 键位Code
+	keyCode_2 = keyCode2; // 拓展2槽位 键位Code
 
-	_627_7_slot_x = keyCode1x; // ��չ1��λX������
-	_627_7_slot_y = keyCode1y; // ��չ1��λY������
-	_627_8_slot_x = keyCode2x; // ��չ2��λX������
-	_627_8_slot_y = keyCode2y; // ��չ2��λY������
+	_627_7_slot_x = keyCode1x; // 拓展1槽位X轴坐标
+	_627_7_slot_y = keyCode1y; // 拓展1槽位Y轴坐标
+	_627_8_slot_x = keyCode2x; // 拓展2槽位X轴坐标
+	_627_8_slot_y = keyCode2y; // 拓展2槽位Y轴坐标
 
-	RtlCopyMemory((LPVOID)0x004CDCFA, "\x81\xFB\x0A\x03\x00\x00", 6);//ԭ����չ2����λ���ݡ�
-	RtlCopyMemory((LPVOID)0x004C0AE6, "\x83\xF8\x08", 3);//��ʾ�ڻ�����
-	RtlCopyMemory((LPVOID)0x004B33C7, "\x83\xFF\x08", 3);//������ʾ
-	RtlCopyMemory((LPVOID)0x004CC4AE, "\x83\xFF\x08", 3);//��ֵ���չʾ��ȡ
-	RtlCopyMemory((LPVOID)0x004CC383, "\x83\xFB\x08", 3);//��ֵ���չʾ��ȡ
-	RtlCopyMemory((LPVOID)0x004BA475, "\x83\xFB\x08", 3);//ʹ�����ܹ��任��λ
-	RtlCopyMemory((LPVOID)0x004BA1E3, "\x83\xFE\x08", 3);//ʹ�����ܹ��任��λ
-	RtlCopyMemory((LPVOID)0x004BB64F, "\x83\xFE\x08", 3);//�ܹ��Ҽ�����
-	RtlCopyMemory((LPVOID)0x00917D3D, "\x83\xFE\x09", 3);//ʹ�ܹ��ͷż���
-	RtlCopyMemory((LPVOID)0x004FA050, "\x8D\x70\x08", 3);//����ѧϰ���ڣ����������λ����
-	RtlCopyMemory((LPVOID)0x00917648, "\x83\xFB\x08", 3);//����ѧϰ������ʾ����ͼ��
+	RtlCopyMemory((LPVOID)0x004CDCFA, "\x81\xFB\x0A\x03\x00\x00", 6);//原生拓展2个槽位数据。
+	RtlCopyMemory((LPVOID)0x004C0AE6, "\x83\xF8\x08", 3);//显示在画面中
+	RtlCopyMemory((LPVOID)0x004B33C7, "\x83\xFF\x08", 3);//按键显示
+	RtlCopyMemory((LPVOID)0x004CC4AE, "\x83\xFF\x08", 3);//数值面板展示读取
+	RtlCopyMemory((LPVOID)0x004CC383, "\x83\xFB\x08", 3);//数值面板展示读取
+	RtlCopyMemory((LPVOID)0x004BA475, "\x83\xFB\x08", 3);//使技能能够变换孔位
+	RtlCopyMemory((LPVOID)0x004BA1E3, "\x83\xFE\x08", 3);//使技能能够变换孔位
+	RtlCopyMemory((LPVOID)0x004BB64F, "\x83\xFE\x08", 3);//能够右键技能
+	RtlCopyMemory((LPVOID)0x00917D3D, "\x83\xFE\x09", 3);//使能够释放技能
+	RtlCopyMemory((LPVOID)0x004FA050, "\x8D\x70\x08", 3);//技能学习窗口，技能脱离槽位修正
+	RtlCopyMemory((LPVOID)0x00917648, "\x83\xFB\x08", 3);//技能学习窗口显示技能图标
 	RtlCopyMemory((LPVOID)0x009176DE, "\x83\xFB\x08", 3);
 	RtlCopyMemory((LPVOID)0x009167F8, "\x83\xFE\x08", 3);
-	WriteJmp((LPVOID)0x004B3392, _627_Hook_4B3392);//����������ʾ
-	WriteJmp((LPVOID)0x009160DD, _627_Hook_9160DD);//����ʶ��
-	WriteJmp((LPVOID)0x009160C4, _627_Hook_9160C4);//������������
-	WriteJmp((LPVOID)0x00916081, _627_Hook_916081);//������������
-	WriteJmp((LPVOID)0x00917D9F, _627_Hook_917D9F);//�����ͷ�
-	WriteJmp((LPVOID)0x0075DE5E, _627_Hook_75DE5E);//������ʶд��
+	WriteJmp((LPVOID)0x004B3392, _627_Hook_4B3392);//更换按键显示
+	WriteJmp((LPVOID)0x009160DD, _627_Hook_9160DD);//按键识别
+	WriteJmp((LPVOID)0x009160C4, _627_Hook_9160C4);//上栏按键修正
+	WriteJmp((LPVOID)0x00916081, _627_Hook_916081);//上栏按键修正
+	WriteJmp((LPVOID)0x00917D9F, _627_Hook_917D9F);//持续释放
+	WriteJmp((LPVOID)0x0075DE5E, _627_Hook_75DE5E);//按键标识写入
 	WriteJmp((LPVOID)0x006C8CEA, _627_Hook_6C8CEA);
 	WriteJmp((LPVOID)0x006D8DA6, _627_Hook_6D8DA6);
-	WriteJmp((LPVOID)0x011D2EE8, _627_Hook_11D2EE8);//����ѧϰ����Ĭ��ʮ�ĸ����ܲ�λ������pvfӰ��
-	WriteJmp((LPVOID)0x010636E6, _627_Hook_10636E6);//����ѧϰ����Ĭ��ʮ�ĸ����ܲ�λ������pvfӰ��
-	WriteJmp((LPVOID)0x010636F7, _627_Hook_10636F7);//����ѧϰ����Ĭ��ʮ�ĸ����ܲ�λ�Ű�
-	WriteJmp((LPVOID)0x004CDCDC, _627_Hook_4CDCDC);//���ɲ�λ��ʱ��д������ֵ
+	WriteJmp((LPVOID)0x011D2EE8, _627_Hook_11D2EE8);//技能学习窗口默认十四个技能槽位，不受pvf影响
+	WriteJmp((LPVOID)0x010636E6, _627_Hook_10636E6);//技能学习窗口默认十四个技能槽位，不受pvf影响
+	WriteJmp((LPVOID)0x010636F7, _627_Hook_10636F7);//技能学习窗口默认十四个技能槽位排版
+	WriteJmp((LPVOID)0x004CDCDC, _627_Hook_4CDCDC);//生成槽位的时候写入坐标值
 
 	/*
-	fr��
+	fr：
 	Memory.protect(ptr(0x08604B1E), 4, 'rwx');
 	ptr(0x08604B1E).writeByteArray([0x83, 0x7D, 0xEC, 0x07]);
 	Memory.protect(ptr(0x08604B8C), 7, 'rwx');
@@ -584,23 +584,23 @@ void __fastcall SkilSlot_0627(int keyCode1, int keyCode2, int keyCode1x, int key
 
 
 	pvf:
-	�����ɫ·����clientonly/hotkeysystem.co
-	�����ɫ·����clientonly/hotkeysystemforcreator.co
+	常规角色路径：clientonly/hotkeysystem.co
+	缔造角色路径：clientonly/hotkeysystemforcreator.co
 
-	��ע:
-	`��չ���ܿ��ټ� 7`	55 ---[55] HookKey1
-	`��չ���ܿ��ټ� 8`	56 ---[56] HookKey2
+	备注:
+	`扩展技能快速键 7`	55 ---[55] HookKey1
+	`扩展技能快速键 8`	56 ---[56] HookKey2
 	`dungeon`
 	`right`	17 ---[17] &L_Ctrl
 	`right`	18 ---[18] &L_Alt
 
 	[key]
-	`��չ���ܿ��ټ� 7`	55
+	`扩展技能快速键 7`	55
 	`dungeon`
 	`right`	17
 
 	[key]
-	`��չ���ܿ��ټ� 8`	56
+	`扩展技能快速键 8`	56
 	`dungeon`
 	`right`	18
 	*/

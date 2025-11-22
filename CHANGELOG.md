@@ -1,4 +1,5 @@
-## [更新记录](https://github.com/manydots/DofProject/releases)
+##### 2025-11-22
+ - 修复编译与清理格式问题
 
 ##### 2025-01-21
 

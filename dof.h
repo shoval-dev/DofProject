@@ -1,14 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
-#define WIN32_LEAN_AND_MEAN             // ´Ó Windows Í·ÎÄ¼şÖĞÅÅ³ı¼«ÉÙÊ¹ÓÃµÄÄÚÈİ
-// Windows Í·ÎÄ¼ş
+#define WIN32_LEAN_AND_MEAN             // ä» Windows å¤´æ–‡ä»¶ä¸­æ’é™¤æå°‘ä½¿ç”¨çš„å†…å®¹
+// Windows å¤´æ–‡ä»¶
 #include <windows.h>
 #include <iostream>
 #include <string> 
 #include <vector>
 #include <fstream>
-#include <ctime>  // °üº¬Ê±¼ä´¦ÀíµÄÍ·ÎÄ¼ş
-#include <iomanip>  // °üº¬ÓÃÓÚÉèÖÃÊä³ö¸ñÊ½µÄÍ·ÎÄ¼ş
+#include <ctime>  // åŒ…å«æ—¶é—´å¤„ç†çš„å¤´æ–‡ä»¶
+#include <iomanip>  // åŒ…å«ç”¨äºè®¾ç½®è¾“å‡ºæ ¼å¼çš„å¤´æ–‡ä»¶
 #include <filesystem>
 
 #include "Constants.h"
@@ -19,4 +19,4 @@
 #include "GameStruct.h"
 #include "Gamex.h"
 
-namespace fs = std::filesystem; // ÅäÖÃC++17 ÏîÄ¿-ÅäÖÃÊôĞÔ- C/C++ -ÓïÑÔ-  C++ÓïÑÔ±ê×¼
+namespace fs = std::filesystem; // é…ç½®C++17 é¡¹ç›®-é…ç½®å±æ€§- C/C++ -è¯­è¨€-  C++è¯­è¨€æ ‡å‡†

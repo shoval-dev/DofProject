@@ -1,67 +1,82 @@
-#include "HotKey.h"
+﻿#include "HotKey.h"
+#include <vector>
 
-std::vector<HOTKEY_INFO> HotKeyList;
+// 内部专用的热键结构体，字段与原始 HOTKEY_INFO 完全一致
+struct HOTKEY_INFO_INTERNAL
+{
+    HOTKEY_ID HotkeyID;      // 标识
+    PFUNC     pfnCallbackFunc; // 按键组合回调
+    BYTE      KeyCode;       // 普通键
+    BYTE      FuncKey;       // 功能键
+    BYTE      AnotherKeyCode;// 其他键
+    BYTE      byKeyStatus;   // 键状态
+    BOOL      bStatus;       // 状态
+    BOOL      bDirectTrigger;// 直接触发
+};
+
+// 只在本 cpp 内部使用
+static std::vector<HOTKEY_INFO_INTERNAL> HotKeyList;
 
 void HandleTheEvents()
 {
-	MSG msg;
-	while (PeekMessage(&msg, 0, 0, 0, 1))
-	{
-		DispatchMessage(&msg);
-		TranslateMessage(&msg);
-	}
+    MSG msg;
+    while (PeekMessage(&msg, 0, 0, 0, 1))
+    {
+        DispatchMessage(&msg);
+        TranslateMessage(&msg);
+    }
 }
 
 void SuperDelay(int nElapse, int nUnit)
 {
-	LARGE_INTEGER int64;
-	HANDLE hTimer;
+    LARGE_INTEGER int64;
+    HANDLE hTimer;
 
-	if (1 == nUnit)
-	{
-		int64.QuadPart = -10 * nElapse;
-		hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
-		SetWaitableTimer(hTimer, &int64, 0, NULL, NULL, FALSE);
-		while (WAIT_OBJECT_0 != MsgWaitForMultipleObjects(1, &hTimer, FALSE, INFINITE, QS_ALLINPUT))
-		{
-			HandleTheEvents();
-		}
-		CloseHandle(hTimer);
-		return;
-	}
-	switch (nUnit)
-	{
-	case 0:
-		nUnit = 1;
-		break;
-	case 2:
-		nUnit = 1000;
-		break;
-	case 3:
-		nUnit = 1000 * 60;
-		break;
-	case 4:
-		nUnit = 1000 * 60 * 60;
-		break;
-	case 5:
-		nUnit = 1000 * 60 * 60 * 24;
-		break;
-	default:
-		break;
-	}
+    if (1 == nUnit)
+    {
+        int64.QuadPart = -10 * nElapse;
+        hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
+        SetWaitableTimer(hTimer, &int64, 0, NULL, NULL, FALSE);
+        while (WAIT_OBJECT_0 != MsgWaitForMultipleObjects(1, &hTimer, FALSE, INFINITE, QS_ALLINPUT))
+        {
+            HandleTheEvents();
+        }
+        CloseHandle(hTimer);
+        return;
+    }
+    switch (nUnit)
+    {
+    case 0:
+        nUnit = 1;
+        break;
+    case 2:
+        nUnit = 1000;
+        break;
+    case 3:
+        nUnit = 1000 * 60;
+        break;
+    case 4:
+        nUnit = 1000 * 60 * 60;
+        break;
+    case 5:
+        nUnit = 1000 * 60 * 60 * 24;
+        break;
+    default:
+        break;
+    }
 
-	for (int i = 0; i < nUnit; i++)
-	{
-		int64.QuadPart = -10 * nElapse * 1000;
-		hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
-		SetWaitableTimer(hTimer, &int64, 0, NULL, NULL, FALSE);
-		while (WAIT_OBJECT_0 != MsgWaitForMultipleObjects(1, &hTimer, FALSE, INFINITE, QS_ALLINPUT))
-		{
-			HandleTheEvents();
-		}
-		CloseHandle(hTimer);
-		return;
-	}
+    for (int i = 0; i < nUnit; i++)
+    {
+        int64.QuadPart = -10 * nElapse * 1000;
+        hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
+        SetWaitableTimer(hTimer, &int64, 0, NULL, NULL, FALSE);
+        while (WAIT_OBJECT_0 != MsgWaitForMultipleObjects(1, &hTimer, FALSE, INFINITE, QS_ALLINPUT))
+        {
+            HandleTheEvents();
+        }
+        CloseHandle(hTimer);
+        return;
+    }
 }
 
 /*
@@ -77,98 +92,103 @@ void SuperDelay(int nElapse, int nUnit)
 */
 HOTKEY_ID HotkeyMonitor(PFUNC pfnCallbackFunc, BYTE KeyCode, BYTE FuncKeyStatus, BYTE AnotherKeyCode, UINT uElapse, BOOL bDirectTrigger)
 {
-	HOTKEY_INFO TempHotkeyInfo;
+    HOTKEY_INFO_INTERNAL TempHotkeyInfo;
 
-	if (KeyCode <= 0)
-		return 0;
+    if (KeyCode <= 0)
+        return 0;
 
-	for (std::vector<HOTKEY_INFO>::iterator it = HotKeyList.begin(); it != HotKeyList.end(); it++)
-	{
-		if (it->KeyCode == KeyCode && it->FuncKey == FuncKeyStatus && it->AnotherKeyCode == AnotherKeyCode)
-		{
-			it->pfnCallbackFunc = pfnCallbackFunc;
-			it->bDirectTrigger = bDirectTrigger;
-			if (it->HotkeyID)
-				return it->HotkeyID;
-			it->HotkeyID = 1000001 + (it - HotKeyList.begin());
-			return it->HotkeyID;
-		}
-	}
+    for (std::vector<HOTKEY_INFO_INTERNAL>::iterator it = HotKeyList.begin(); it != HotKeyList.end(); ++it)
+    {
+        if (it->KeyCode == KeyCode && it->FuncKey == FuncKeyStatus && it->AnotherKeyCode == AnotherKeyCode)
+        {
+            it->pfnCallbackFunc = pfnCallbackFunc;
+            it->bDirectTrigger = bDirectTrigger;
+            if (it->HotkeyID)
+                return it->HotkeyID;
+            it->HotkeyID = 1000001 + (HOTKEY_ID)(it - HotKeyList.begin());
+            return it->HotkeyID;
+        }
+    }
 
-	TempHotkeyInfo.pfnCallbackFunc = pfnCallbackFunc;
-	TempHotkeyInfo.KeyCode = KeyCode;
-	TempHotkeyInfo.FuncKey = FuncKeyStatus;
-	TempHotkeyInfo.AnotherKeyCode = AnotherKeyCode;
-	TempHotkeyInfo.bDirectTrigger = bDirectTrigger;
-	TempHotkeyInfo.HotkeyID = 1000001 + HotKeyList.size();
+    TempHotkeyInfo.pfnCallbackFunc = pfnCallbackFunc;
+    TempHotkeyInfo.KeyCode = KeyCode;
+    TempHotkeyInfo.FuncKey = FuncKeyStatus;
+    TempHotkeyInfo.AnotherKeyCode = AnotherKeyCode;
+    TempHotkeyInfo.bDirectTrigger = bDirectTrigger;
+    TempHotkeyInfo.byKeyStatus = 0;
+    TempHotkeyInfo.bStatus = FALSE;
+    TempHotkeyInfo.HotkeyID = 1000001 + (HOTKEY_ID)HotKeyList.size();
 
-	HotKeyList.push_back(TempHotkeyInfo);
+    HotKeyList.push_back(TempHotkeyInfo);
 
-	if (1000001 == TempHotkeyInfo.HotkeyID)
-		SetTimer(NULL, 666, uElapse, (TIMERPROC)&HotKeyMonThread);
+    if (1000001 == TempHotkeyInfo.HotkeyID)
+        SetTimer(NULL, 666, uElapse, (TIMERPROC)&HotKeyMonThread);
 
-	return TempHotkeyInfo.HotkeyID;
+    return TempHotkeyInfo.HotkeyID;
 }
 
 // 监视热键线程
 VOID CALLBACK HotKeyMonThread(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
-	PFUNC pfnTempEvent;
-	UINT uTempID;
-	SHORT KeyStatusCache[256];
-	INT byTemp = 0;
+    PFUNC pfnTempEvent;
+    UINT uTempID;
+    SHORT KeyStatusCache[256];
+    INT byTemp = 0;
 
-	for (int i = 1; i <= 255; i++)
-	{
-		KeyStatusCache[i] = 251;
-		KeyStatusCache[i] = GetAsyncKeyState(i);
-	}
-	for (std::vector<HOTKEY_INFO>::iterator it = HotKeyList.begin(); it != HotKeyList.end(); it++)
-	{
-		if (it->HotkeyID)
-		{
-			byTemp = (BYTE)(it->KeyCode);
-			byTemp = KeyStatusCache[byTemp];
+    for (int i = 1; i <= 255; i++)
+    {
+        KeyStatusCache[i] = 251;
+        KeyStatusCache[i] = GetAsyncKeyState(i);
+    }
+    for (std::vector<HOTKEY_INFO_INTERNAL>::iterator it = HotKeyList.begin(); it != HotKeyList.end(); ++it)
+    {
+        if (it->HotkeyID)
+        {
+            byTemp = (BYTE)(it->KeyCode);
+            byTemp = KeyStatusCache[byTemp];
 
-			if (0 == byTemp || 1 == byTemp)
-			{
-				if (1 == it->byKeyStatus)
-					it->byKeyStatus = 2;
-				else
-				{
-					it->byKeyStatus = 0;
-					continue;
-				}
-			}
-			else if (byTemp < 0)
-			{
-				if (0 == it->byKeyStatus)
-					it->byKeyStatus = 1;
-				else if (it->byKeyStatus < 0)
-					continue;
-			}
+            if (0 == byTemp || 1 == byTemp)
+            {
+                if (1 == it->byKeyStatus)
+                    it->byKeyStatus = 2;
+                else
+                {
+                    it->byKeyStatus = 0;
+                    continue;
+                }
+            }
+            else if (byTemp < 0)
+            {
+                if (0 == it->byKeyStatus)
+                    it->byKeyStatus = 1;
+                else if (it->byKeyStatus < 0)
+                    continue;
+            }
 
-			if (it->byKeyStatus > 0 && it->byKeyStatus != 88)
-			{
-				it->byKeyStatus = 88;
-				if (it->FuncKey == ((KeyStatusCache[18] < 0 ? MOD_ALT : 0) | (KeyStatusCache[17] < 0 ? MOD_CONTROL : 0) | (KeyStatusCache[16] < 0 ? MOD_SHIFT : 0) | (KeyStatusCache[91] < 0 ? MOD_WIN : 0)))
-				{
-					if (it->AnotherKeyCode)
-					{
-						byTemp = it->AnotherKeyCode;
-						if (KeyStatusCache[byTemp] >= 0)
-							continue;
-					}
-					pfnTempEvent = it->pfnCallbackFunc;
-					uTempID = it->HotkeyID;
-					if (it->bDirectTrigger)
-						CallWindowProcA((WNDPROC)pfnTempEvent, (HWND)uTempID, 0, 0, 0);
-					else
-						CloseHandle(CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)pfnTempEvent, (LPVOID)uTempID, 0, NULL));
-				}
-			}
-		}
-	}
+            if (it->byKeyStatus > 0 && it->byKeyStatus != 88)
+            {
+                it->byKeyStatus = 88;
+                if (it->FuncKey == ((KeyStatusCache[18] < 0 ? MOD_ALT : 0) |
+                                    (KeyStatusCache[17] < 0 ? MOD_CONTROL : 0) |
+                                    (KeyStatusCache[16] < 0 ? MOD_SHIFT : 0) |
+                                    (KeyStatusCache[91] < 0 ? MOD_WIN : 0)))
+                {
+                    if (it->AnotherKeyCode)
+                    {
+                        byTemp = it->AnotherKeyCode;
+                        if (KeyStatusCache[byTemp] >= 0)
+                            continue;
+                    }
+                    pfnTempEvent = it->pfnCallbackFunc;
+                    uTempID = it->HotkeyID;
+                    if (it->bDirectTrigger)
+                        CallWindowProcA((WNDPROC)pfnTempEvent, (HWND)uTempID, 0, 0, 0);
+                    else
+                        CloseHandle(CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)pfnTempEvent, (LPVOID)uTempID, 0, NULL));
+                }
+            }
+        }
+    }
 }
 
 /*
@@ -180,15 +200,16 @@ VOID CALLBACK HotKeyMonThread(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTi
 
 BOOL HotKeyUnMonitor(HOTKEY_ID HotkeyID)
 {
-	for (std::vector<HOTKEY_INFO>::iterator it = HotKeyList.begin(); it != HotKeyList.end(); it++)
-	{
-		if (0 == HotkeyID)
-			it->HotkeyID = 0;
-		else if (HotkeyID == it->HotkeyID)
-		{
-			it->HotkeyID = 0;
-			return TRUE;
-		}
-	}
-	return (0 == HotkeyID);
+    for (std::vector<HOTKEY_INFO_INTERNAL>::iterator it = HotKeyList.begin(); it != HotKeyList.end(); ++it)
+    {
+        if (0 == HotkeyID)
+            it->HotkeyID = 0;
+        else if (HotkeyID == it->HotkeyID)
+        {
+            it->HotkeyID = 0;
+            return TRUE;
+        }
+    }
+    return (0 == HotkeyID);
 }
+

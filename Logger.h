@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "dof.h"
 
 inline void LogMessage(const char* format, ...) {
@@ -10,7 +10,7 @@ inline void LogMessage(const char* format, ...) {
 	printf("\n");
 }
 
-// Êä³ö¿í×Ö·û´®ÈÕÖ¾ĞÅÏ¢
+// è¾“å‡ºå®½å­—ç¬¦ä¸²æ—¥å¿—ä¿¡æ¯
 inline void LogMessageW(const wchar_t* buf, ...)
 {
 	wprintf(L"[Log][%ls]", getCurrentTimeW().c_str());
@@ -28,18 +28,18 @@ inline void LogMessageW(const wchar_t* buf, ...)
 inline void LogMessage(const std::string& message, int openLog) {
 	if (openLog == 1) {
 		std::ofstream log_file;
-		log_file.open("DOF.log", std::ios_base::app); // ÎÄ¼şÄ©Î²Ìí¼Ó
+		log_file.open("DOF.log", std::ios_base::app); // æ–‡ä»¶æœ«å°¾æ·»åŠ 
 
-		// ¼ì²éÎÄ¼şÊÇ·ñ³É¹¦´ò¿ª
+		// æ£€æŸ¥æ–‡ä»¶æ˜¯å¦æˆåŠŸæ‰“å¼€
 		if (!log_file.is_open()) {
-			std::cerr << "ÎŞ·¨´ò¿ªÈÕÖ¾ÎÄ¼ş" << std::endl;
+			std::cerr << "æ— æ³•æ‰“å¼€æ—¥å¿—æ–‡ä»¶" << std::endl;
 			return;
 		}
 
-		// »ñÈ¡µ±Ç°Ê±¼ä
+		// è·å–å½“å‰æ—¶é—´
 		std::string timestamp = getCurrentTime();
 
-		// Ğ´ÈëÊ±¼ä´ÁºÍÈÕÖ¾ĞÅÏ¢
+		// å†™å…¥æ—¶é—´æˆ³å’Œæ—¥å¿—ä¿¡æ¯
 		log_file << "[" << timestamp << "]" << message << std::endl;
 		log_file.close();
 	}
@@ -48,18 +48,18 @@ inline void LogMessage(const std::string& message, int openLog) {
 inline void LogMessage(const INT& message, int openLog) {
 	if (openLog == 1) {
 		std::ofstream log_file;
-		log_file.open("DOF.log", std::ios_base::app); // ÎÄ¼şÄ©Î²Ìí¼Ó
+		log_file.open("DOF.log", std::ios_base::app); // æ–‡ä»¶æœ«å°¾æ·»åŠ 
 
-		// ¼ì²éÎÄ¼şÊÇ·ñ³É¹¦´ò¿ª
+		// æ£€æŸ¥æ–‡ä»¶æ˜¯å¦æˆåŠŸæ‰“å¼€
 		if (!log_file.is_open()) {
-			std::cerr << "ÎŞ·¨´ò¿ªÈÕÖ¾ÎÄ¼ş" << std::endl;
+			std::cerr << "æ— æ³•æ‰“å¼€æ—¥å¿—æ–‡ä»¶" << std::endl;
 			return;
 		}
 
-		// »ñÈ¡µ±Ç°Ê±¼ä
+		// è·å–å½“å‰æ—¶é—´
 		std::string timestamp = getCurrentTime();
 
-		// Ğ´ÈëÊ±¼ä´ÁºÍÈÕÖ¾ĞÅÏ¢
+		// å†™å…¥æ—¶é—´æˆ³å’Œæ—¥å¿—ä¿¡æ¯
 		log_file << "[" << timestamp << "][Packet]" << message << std::endl;
 
 		log_file.close();
@@ -69,28 +69,29 @@ inline void LogMessage(const INT& message, int openLog) {
 inline void LogMessage(const wchar_t* message, int openLog) {
 	if (openLog == 1) {
 		std::ofstream log_file;
-		log_file.open("DOF.log", std::ios_base::app); // ÎÄ¼şÄ©Î²Ìí¼Ó
+		log_file.open("DOF.log", std::ios_base::app); // æ–‡ä»¶æœ«å°¾æ·»åŠ 
 
-		// ¼ì²éÎÄ¼şÊÇ·ñ³É¹¦´ò¿ª
+		// æ£€æŸ¥æ–‡ä»¶æ˜¯å¦æˆåŠŸæ‰“å¼€
 		if (!log_file.is_open()) {
-			std::cerr << "ÎŞ·¨´ò¿ªÈÕÖ¾ÎÄ¼ş" << std::endl;
+			std::cerr << "æ— æ³•æ‰“å¼€æ—¥å¿—æ–‡ä»¶" << std::endl;
 			return;
 		}
 
-		// »ñÈ¡µ±Ç°Ê±¼ä
+		// è·å–å½“å‰æ—¶é—´
 		std::string timestamp = getCurrentTime();
 
-		// ·ÖÅä»º³åÇøÀ´´æ´¢×ª»»ºóµÄ¶à×Ö½Ú×Ö·û´®
+		// åˆ†é…ç¼“å†²åŒºæ¥å­˜å‚¨è½¬æ¢åçš„å¤šå­—èŠ‚å­—ç¬¦ä¸²
 		int len = WideCharToMultiByte(CP_ACP, 0, message, -1, NULL, 0, NULL, NULL);
 		char* mbstr = new char[len + 1];
-		mbstr[len] = '\0'; // È·±£×Ö·û´®ÒÔ null ½áÎ²
+		mbstr[len] = '\0'; // ç¡®ä¿å­—ç¬¦ä¸²ä»¥ null ç»“å°¾
 
-		// Ö´ĞĞ×ª»»
+		// æ‰§è¡Œè½¬æ¢
 		WideCharToMultiByte(CP_ACP, 0, message, -1, mbstr, len, NULL, NULL);
 
-		// Ğ´ÈëÊ±¼ä´ÁºÍÈÕÖ¾ĞÅÏ¢
+		// å†™å…¥æ—¶é—´æˆ³å’Œæ—¥å¿—ä¿¡æ¯
 		log_file << "[" << timestamp << "][Message]" << mbstr << std::endl;
 		delete[] mbstr;
 		log_file.close();
 	}
 }
+

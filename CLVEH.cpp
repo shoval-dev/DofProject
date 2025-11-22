@@ -1,4 +1,4 @@
-#include "CLVEH.h"
+ï»¿#include "CLVEH.h"
 #include <string>
 
 #pragma warning(disable:4996)
@@ -9,7 +9,7 @@ void VehWriteMemCode(DWORD Adress, BYTE ArgByte)
 	VirtualProtect((LPVOID)Adress, 1, PAGE_EXECUTE_READWRITE, &OldPro);
 	*(BYTE*)Adress = ArgByte;
 	VirtualProtect((LPVOID)Adress, 1, OldPro, NULL);
-	FlushInstructionCache(GetCurrentProcess(), (LPCVOID)Adress, 1); // È·±£¸ü¸Ä±»Ó¦ÓÃ
+	FlushInstructionCache(GetCurrentProcess(), (LPCVOID)Adress, 1); // ç¡®ä¿æ›´æ”¹è¢«åº”ç”¨
 }
 
 LONG NTAPI veh_optimization(struct _EXCEPTION_POINTERS* ExceptionInfo)
@@ -56,14 +56,14 @@ void CCLVEH::AddVeh(char* VehName, char* MoudleName, DWORD MoudleOffset, DWORD V
 	Data.IsOnce_ = IsOnce;
 	Data.Fun_ = Fun;
 
-	WaitForSingleObject(hMutex, INFINITE); // µÈ´ı½øÈëÁÙ½çÇø
+	WaitForSingleObject(hMutex, INFINITE); // ç­‰å¾…è¿›å…¥ä¸´ç•ŒåŒº
 	VehList.push_back(Data);
-	ReleaseMutex(hMutex); // Àë¿ªÁÙ½çÇø
+	ReleaseMutex(hMutex); // ç¦»å¼€ä¸´ç•ŒåŒº
 }
 
 void CCLVEH::BreakAll()
 {
-	WaitForSingleObject(hMutex, INFINITE); // µÈ´ı½øÈëÁÙ½çÇø
+	WaitForSingleObject(hMutex, INFINITE); // ç­‰å¾…è¿›å…¥ä¸´ç•ŒåŒº
 
 	for (auto& Data : VehList)
 	{
@@ -73,15 +73,15 @@ void CCLVEH::BreakAll()
 		}
 
 		Data.OldCode_ = *(BYTE*)Data.VehHookAdress_;
-		VehWriteMemCode(Data.VehHookAdress_, 0xcc); // INT 3 Ö¸Áî
+		VehWriteMemCode(Data.VehHookAdress_, 0xcc); // INT 3 æŒ‡ä»¤
 	}
 
-	ReleaseMutex(hMutex); // Àë¿ªÁÙ½çÇø
+	ReleaseMutex(hMutex); // ç¦»å¼€ä¸´ç•ŒåŒº
 }
 
 void CCLVEH::BreakOne(DWORD CodeAdress)
 {
-	WaitForSingleObject(hMutex, INFINITE); // µÈ´ı½øÈëÁÙ½çÇø
+	WaitForSingleObject(hMutex, INFINITE); // ç­‰å¾…è¿›å…¥ä¸´ç•ŒåŒº
 
 	for (auto& Data : VehList)
 	{
@@ -91,17 +91,17 @@ void CCLVEH::BreakOne(DWORD CodeAdress)
 		}
 		if (CodeAdress == Data.VehHookAdress_ + Data.HookCodeLen_)
 		{
-			VehWriteMemCode(Data.VehHookAdress_, 0xcc); // INT 3 Ö¸Áî
+			VehWriteMemCode(Data.VehHookAdress_, 0xcc); // INT 3 æŒ‡ä»¤
 			break;
 		}
 	}
 
-	ReleaseMutex(hMutex); // Àë¿ªÁÙ½çÇø
+	ReleaseMutex(hMutex); // ç¦»å¼€ä¸´ç•ŒåŒº
 }
 
 void CCLVEH::BreakRun(DWORD CodeAdress, _EXCEPTION_POINTERS* ExceptionInfo)
 {
-	WaitForSingleObject(hMutex, INFINITE); // µÈ´ı½øÈëÁÙ½çÇø
+	WaitForSingleObject(hMutex, INFINITE); // ç­‰å¾…è¿›å…¥ä¸´ç•ŒåŒº
 
 	for (auto& Data : VehList)
 	{
@@ -114,7 +114,7 @@ void CCLVEH::BreakRun(DWORD CodeAdress, _EXCEPTION_POINTERS* ExceptionInfo)
 			VehWriteMemCode(Data.VehHookAdress_, Data.OldCode_);
 			if (Data.IsOnce_ == 0)
 			{
-				ExceptionInfo->ContextRecord->EFlags |= 0x100; // »Ö¸´µ¥²½±êÖ¾
+				ExceptionInfo->ContextRecord->EFlags |= 0x100; // æ¢å¤å•æ­¥æ ‡å¿—
 			}
 
 			if (Data.Fun_ != NULL)
@@ -126,19 +126,19 @@ void CCLVEH::BreakRun(DWORD CodeAdress, _EXCEPTION_POINTERS* ExceptionInfo)
 		}
 	}
 
-	ReleaseMutex(hMutex); // Àë¿ªÁÙ½çÇø
+	ReleaseMutex(hMutex); // ç¦»å¼€ä¸´ç•ŒåŒº
 }
 
 void CCLVEH::InitVeh()
 {
-	hMutex = CreateMutex(NULL, FALSE, NULL); // ´´½¨»¥³âÁ¿
+	hMutex = CreateMutex(NULL, FALSE, NULL); // åˆ›å»ºäº’æ–¥é‡
 	m_Handle = AddVectoredExceptionHandler(0, (PVECTORED_EXCEPTION_HANDLER)veh_optimization);
 	BreakAll();
 }
 
 void CCLVEH::ExitVeh()
 {
-	WaitForSingleObject(hMutex, INFINITE); // µÈ´ı½øÈëÁÙ½çÇø
+	WaitForSingleObject(hMutex, INFINITE); // ç­‰å¾…è¿›å…¥ä¸´ç•ŒåŒº
 
 	RemoveVectoredExceptionHandler(m_Handle);
 
@@ -152,6 +152,6 @@ void CCLVEH::ExitVeh()
 		VehWriteMemCode(Data.VehHookAdress_, Data.OldCode_);
 	}
 
-	ReleaseMutex(hMutex); // Àë¿ªÁÙ½çÇø
-	CloseHandle(hMutex); // ¹Ø±Õ»¥³âÁ¿¾ä±ú
+	ReleaseMutex(hMutex); // ç¦»å¼€ä¸´ç•ŒåŒº
+	CloseHandle(hMutex); // å…³é—­äº’æ–¥é‡å¥æŸ„
 }

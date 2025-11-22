@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 #include "Game.h"
 
 
-// ¼ì²éÄÚ´æÊÇ·ñ´æÔÚÇÒ¿É¶Á
+// æ£€æŸ¥å†…å­˜æ˜¯å¦å­˜åœ¨ä¸”å¯è¯»
 BOOL IsMemoryReadable(void* address, size_t length)
 {
 	MEMORY_BASIC_INFORMATION memInfo;
@@ -10,41 +10,41 @@ BOOL IsMemoryReadable(void* address, size_t length)
 
 	if (bytesReturned == sizeof(MEMORY_BASIC_INFORMATION))
 	{
-		// ¼ì²éÄÚ´æ×´Ì¬ÊÇ·ñÎªÒÑÌá½»£¨MEM_COMMIT£©
+		// æ£€æŸ¥å†…å­˜çŠ¶æ€æ˜¯å¦ä¸ºå·²æäº¤ï¼ˆMEM_COMMITï¼‰
 		if (memInfo.State == MEM_COMMIT)
 		{
-			// ¼ì²éÄÚ´æ±£»¤ÊôĞÔÊÇ·ñÎª¿É¶Á£¨°üÀ¨¶ÁĞ´¡¢Ö»¶Á£©// Ö´ĞĞÇÒ¿É¶Á  PAGE_EXECUTE_READ
+			// æ£€æŸ¥å†…å­˜ä¿æŠ¤å±æ€§æ˜¯å¦ä¸ºå¯è¯»ï¼ˆåŒ…æ‹¬è¯»å†™ã€åªè¯»ï¼‰// æ‰§è¡Œä¸”å¯è¯»  PAGE_EXECUTE_READ
 			if ((memInfo.Protect & (PAGE_READWRITE | PAGE_READONLY)) != 0)
 			{
-				// ¼ì²éÄÚ´æÇøÓòµÄ´óĞ¡ÊÇ·ñ×ã¹»
+				// æ£€æŸ¥å†…å­˜åŒºåŸŸçš„å¤§å°æ˜¯å¦è¶³å¤Ÿ
 				if (memInfo.RegionSize >= length)
 				{
-					return true; // ÄÚ´æ´æÔÚÇÒ¿É¶Á
+					return true; // å†…å­˜å­˜åœ¨ä¸”å¯è¯»
 				}
 			}
 		}
 	}
 
-	return false; // ÄÚ´æ²»´æÔÚ¡¢²»¿É¶Á¡¢±£»¤ÊôĞÔ²»ÔÊĞí¶ÁÈ¡»òÇøÓò´óĞ¡²»×ã
+	return false; // å†…å­˜ä¸å­˜åœ¨ã€ä¸å¯è¯»ã€ä¿æŠ¤å±æ€§ä¸å…è®¸è¯»å–æˆ–åŒºåŸŸå¤§å°ä¸è¶³
 }
 
 
-// ¶Á×Ö½Ú¼¯ TCHAR×Ö·û¼¯(ANSI/Unicode)  BYTE *buffer
+// è¯»å­—èŠ‚é›† TCHARå­—ç¬¦é›†(ANSI/Unicode)  BYTE *buffer
 BOOL ReadMemoryBytes(TCHAR* buffer, DWORD address, size_t length)
 {
 	if (IsMemoryReadable((void*)address, length))
 	{
-		// ÄÚ´æ&¿É¶Á
+		// å†…å­˜&å¯è¯»
 		memcpy(buffer, (void*)address, length);
 		return true;
 	}
 	return false;
 }
 
-// ¶ÁÈ¡DWORDÕûÊı
+// è¯»å–DWORDæ•´æ•°
 DWORD ReadDword(DWORD address)
 {
-	//ÅĞ¶Ï ÄÚ´æµØÖ·ÊÇ·ñÓĞ¶ÁÈ¡È¨ÏŞ Èç¹ûÓĞ ·µ»ØÖµÊÇ0
+	//åˆ¤æ–­ å†…å­˜åœ°å€æ˜¯å¦æœ‰è¯»å–æƒé™ å¦‚æœæœ‰ è¿”å›å€¼æ˜¯0
 	if (IsBadReadPtr((DWORD*)address, sizeof(DWORD*)) == 0)
 	{
 		return *(DWORD*)address;
@@ -54,7 +54,7 @@ DWORD ReadDword(DWORD address)
 
 FLOAT ReadFloat(DWORD Adress)
 {
-	//ÅĞ¶ÏÄÚ´æÊÇ·ñ¿ÉÒÔ¶Á (²ÎÊı1: ¶ÁÈ¡µÄµØÖ·,  ²ÎÊı2 : ³¤¶È) ·µ»ØÖµ 0µÄ»°¾ÍÊÇ¿ÉÒÔ
+	//åˆ¤æ–­å†…å­˜æ˜¯å¦å¯ä»¥è¯» (å‚æ•°1: è¯»å–çš„åœ°å€,  å‚æ•°2 : é•¿åº¦) è¿”å›å€¼ 0çš„è¯å°±æ˜¯å¯ä»¥
 	if (IsBadReadPtr((void*)Adress, sizeof(FLOAT)) == 0) {
 		return *(FLOAT*)Adress;
 	}
@@ -64,7 +64,7 @@ FLOAT ReadFloat(DWORD Adress)
 
 // wchar_t* IsBadReadPtrWchar(wchar_t* address)
 //{
-//	if (IsBadReadPtr((void*)address, sizeof(wchar_t*)) == 0)//ÅĞ¶Ï ÄÚ´æµØÖ·ÊÇ·ñÓĞ¶ÁÈ¡È¨ÏŞ Èç¹ûÓĞ ·µ»ØÖµÊÇ0
+//	if (IsBadReadPtr((void*)address, sizeof(wchar_t*)) == 0)//åˆ¤æ–­ å†…å­˜åœ°å€æ˜¯å¦æœ‰è¯»å–æƒé™ å¦‚æœæœ‰ è¿”å›å€¼æ˜¯0
 //	{
 //		return  address;
 //	}
@@ -73,7 +73,7 @@ FLOAT ReadFloat(DWORD Adress)
 //}
 
 
-// ½«¿í×Ö½Úwchar_t*×ª»¯Îªµ¥×Ö½Úchar*    
+// å°†å®½å­—èŠ‚wchar_t*è½¬åŒ–ä¸ºå•å­—èŠ‚char*    
 char* UnicodeToAnsi(const wchar_t* szStr)
 {
 	int nLen = WideCharToMultiByte(CP_ACP, 0, szStr, -1, NULL, 0, NULL, NULL);
@@ -88,7 +88,7 @@ char* UnicodeToAnsi(const wchar_t* szStr)
 }
 
 
-// ½«µ¥×Ö½Úchar*×ª»¯Îª¿í×Ö½Úwchar_t*    
+// å°†å•å­—èŠ‚char*è½¬åŒ–ä¸ºå®½å­—èŠ‚wchar_t*    
 wchar_t* AnsiToUnicode(const char* szStr)
 {
 	int nLen = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szStr, -1, NULL, 0);
@@ -102,30 +102,30 @@ wchar_t* AnsiToUnicode(const char* szStr)
 
 }
 
-// Ğ´Ö¸Õë×Ö½Ú¼¯µ½ÄÚ´æ addressÄ¿±ê ptrÊı¾İ length³¤¶È
+// å†™æŒ‡é’ˆå­—èŠ‚é›†åˆ°å†…å­˜ addressç›®æ ‡ ptræ•°æ® lengthé•¿åº¦
 void WriteBytes(void* address, void* ptr, size_t length)
 {
 	std::memcpy(address, ptr, length);
 }
 
-// Ğ´Vector×Ö½Ú¼¯µ½ÄÚ´æ addressÄ¿±êÄÚ´æµØÖ·  Vector×Ö½Ú¼¯Êı¾İ
+// å†™Vectorå­—èŠ‚é›†åˆ°å†…å­˜ addressç›®æ ‡å†…å­˜åœ°å€  Vectorå­—èŠ‚é›†æ•°æ®
 void WriteVectorBytes(void* address, std::vector<BYTE> Vector_BYTE)
 {
 	const void* ptr = reinterpret_cast<const void*>(Vector_BYTE.data());
 	std::memcpy(address, ptr, Vector_BYTE.size());
 }
 
-// ×Ö·û´®×ª×Ö½Ú¼¯
+// å­—ç¬¦ä¸²è½¬å­—èŠ‚é›†
 std::vector<BYTE> stringToBytes(const std::string& str)
 {
 	std::vector<BYTE> byteVector;
-	byteVector.reserve(str.size()); // Ô¤·ÖÅäÄÚ´æÒÔÌá¸ßĞÔÄÜ
-	// ½«×Ö·û´®×ª»»Îª×Ö½Ú¼¯
+	byteVector.reserve(str.size()); // é¢„åˆ†é…å†…å­˜ä»¥æé«˜æ€§èƒ½
+	// å°†å­—ç¬¦ä¸²è½¬æ¢ä¸ºå­—èŠ‚é›†
 	// for (BYTE ch : str)
 	// {
 	//     byteVector.push_back(static_cast<BYTE>(ch));
 	// }
-	// ÆÕÍ¨Ñ­»·
+	// æ™®é€šå¾ªç¯
 	for (size_t i = 0; i < str.size(); i++)
 	{
 		byteVector.push_back(static_cast<BYTE>(str[i]));
@@ -133,7 +133,7 @@ std::vector<BYTE> stringToBytes(const std::string& str)
 	return byteVector;
 }
 
-// ×ª»»ÑÕÉ«
+// è½¬æ¢é¢œè‰²
 std::vector<uint8_t> hexStringToByteArray(const std::string& hex)
 {
 	std::vector<uint8_t> byteArray;
@@ -152,7 +152,7 @@ std::vector<uint8_t> hexStringToByteArray(const std::string& hex)
 	return byteArray;
 }
 
-// vectorÑÕÉ«×ªbyte
+// vectoré¢œè‰²è½¬byte
 std::vector<BYTE> VectorToBytes(const std::string& hex)
 {
 	std::vector<uint8_t> hexBytes = hexStringToByteArray(hex);
@@ -162,24 +162,24 @@ std::vector<BYTE> VectorToBytes(const std::string& hex)
 	// {
 	//     addr[i] = hexBytes[i];
 	// }
-	// hexBytes.begin() + hexBytes.size() or hexBytes.begin() + 3 È¡3¸ö×Ö½Ú
+	// hexBytes.begin() + hexBytes.size() or hexBytes.begin() + 3 å–3ä¸ªå­—èŠ‚
 	std::vector<BYTE> addr(hexBytes.begin(), hexBytes.end());
 	return addr;
 }
 
 
 namespace GameCall {
-	// ·¢ËÍÎÄ±¾call   type 14À®°È¹«¸æ  17ÏµÍ³¹«¸æ 37¸öÈË¹«¸æ
+	// å‘é€æ–‡æœ¬call   type 14å–‡å­å…¬å‘Š  17ç³»ç»Ÿå…¬å‘Š 37ä¸ªäººå…¬å‘Š
 	void SendText(PCWCHAR str, INT rgb, INT type) {
 		UINT ecx = readVal(readVal(SHOP_BASE) + 0x40);
 		game_notice(ecx, 0, str, rgb, type, 0, 0, 0);
 	}
-	// º°»°   type 3¸½½üÈË 1ÇÄÇÄ»°£¨½»Ò×¶Ô»°£© À®°È11 Ê¦Í½8  ¹¤»á6
+	// å–Šè¯   type 3é™„è¿‘äºº 1æ‚„æ‚„è¯ï¼ˆäº¤æ˜“å¯¹è¯ï¼‰ å–‡å­11 å¸ˆå¾’8  å·¥ä¼š6
 	void Shout(PCWCHAR str, INT type) {
 		UINT ecx = readVal(SHOUT_BASE);
 		game_shout(ecx, 0, str, type, 13, 0);
 	}
-	// »æÖÆÎÄ±¾
+	// ç»˜åˆ¶æ–‡æœ¬
 	void DrawText2(INT x, INT y, INT rgb, PCWCHAR str) {
 		UINT ecx = readVal(0x1B45B94);
 		game_text1(ecx, 0, 0x1A74360);
@@ -187,3 +187,4 @@ namespace GameCall {
 		game_text3(ecx, 0);
 	}
 }
+

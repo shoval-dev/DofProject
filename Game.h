@@ -1,46 +1,46 @@
-#pragma once
+ï»¿#pragma once
 #include "dof.h"
 #include "Hook.h"
 
-// ¼ì²éÄÚ´æÊÇ·ñ´æÔÚÇÒ¿É¶Á
+// æ£€æŸ¥å†…å­˜æ˜¯å¦å­˜åœ¨ä¸”å¯è¯»
 BOOL IsMemoryReadable(void* address, size_t length);
 
-// ¶Á×Ö½Ú¼¯ TCHAR×Ö·û¼¯(ANSI/Unicode)  BYTE *buffer
+// è¯»å­—èŠ‚é›† TCHARå­—ç¬¦é›†(ANSI/Unicode)  BYTE *buffer
 BOOL ReadMemoryBytes(TCHAR* buffer, DWORD address, size_t length);
 
-// ¶ÁÈ¡DWORDÕûÊı
+// è¯»å–DWORDæ•´æ•°
 DWORD ReadDword(DWORD address);
 FLOAT ReadFloat(DWORD Adress);
 
 
-// ½«¿í×Ö½Úwchar_t*×ª»¯Îªµ¥×Ö½Úchar*    
+// å°†å®½å­—èŠ‚wchar_t*è½¬åŒ–ä¸ºå•å­—èŠ‚char*    
 char* UnicodeToAnsi(const wchar_t* szStr);
-// ½«µ¥×Ö½Úchar*×ª»¯Îª¿í×Ö½Úwchar_t*    
+// å°†å•å­—èŠ‚char*è½¬åŒ–ä¸ºå®½å­—èŠ‚wchar_t*    
 wchar_t* AnsiToUnicode(const char* szStr);
 
-// Ğ´Ö¸Õë×Ö½Ú¼¯µ½ÄÚ´æ addressÄ¿±ê ptrÊı¾İ length³¤¶È
+// å†™æŒ‡é’ˆå­—èŠ‚é›†åˆ°å†…å­˜ addressç›®æ ‡ ptræ•°æ® lengthé•¿åº¦
 void WriteBytes(void* address, void* ptr, size_t length);
 
-// Ğ´Vector×Ö½Ú¼¯µ½ÄÚ´æ addressÄ¿±êÄÚ´æµØÖ·  Vector×Ö½Ú¼¯Êı¾İ
+// å†™Vectorå­—èŠ‚é›†åˆ°å†…å­˜ addressç›®æ ‡å†…å­˜åœ°å€  Vectorå­—èŠ‚é›†æ•°æ®
 void WriteVectorBytes(void* address, std::vector<BYTE> Vector_BYTE);
 
-// ×Ö·û´®×ª×Ö½Ú¼¯
+// å­—ç¬¦ä¸²è½¬å­—èŠ‚é›†
 std::vector<BYTE> stringToBytes(const std::string& str);
 
-// ×ª»»ÑÕÉ«
+// è½¬æ¢é¢œè‰²
 std::vector<uint8_t> hexStringToByteArray(const std::string& hex);
-// vectorÑÕÉ«×ªbyte
+// vectoré¢œè‰²è½¬byte
 std::vector<BYTE> VectorToBytes(const std::string& hex);
 
-// ¹«¸æCall(À®°È»ùÖ·)
+// å…¬å‘ŠCall(å–‡å­åŸºå€)
 using _game_notice = void(__fastcall*)(UINT ecx, UINT edx, PCWCHAR str, INT rgb, INT type, INT n1, INT n2, INT n3);
 const _game_notice game_notice = (_game_notice)NOTICE_CALL;
 
-// º°»°Call
+// å–Šè¯Call
 using _game_shout = void(__fastcall*)(UINT ecx, UINT edx, PCWCHAR str, INT type, INT n2, INT n3);
 const _game_shout game_shout = (_game_shout)SHOUT_CALL;
 
-// ÎÄ±¾Call
+// æ–‡æœ¬Call
 using _game_text1 = void(__fastcall*)(UINT ecx, UINT edx, INT type);
 const _game_text1 game_text1 = (_game_text1)0x1206550;
 using _game_text2 = void(__fastcall*)(UINT ecx, UINT edx, INT x, INT y, INT rgb, PCWCHAR str);
@@ -49,10 +49,10 @@ using _game_text3 = void(__fastcall*)(UINT ecx, UINT edx);
 const _game_text3 game_text3 = (_game_text3)0x1206570;
 
 namespace GameCall {
-	// ·¢ËÍÎÄ±¾call   type 14À®°È¹«¸æ  17ÏµÍ³¹«¸æ 37¸öÈË¹«¸æ
+	// å‘é€æ–‡æœ¬call   type 14å–‡å­å…¬å‘Š  17ç³»ç»Ÿå…¬å‘Š 37ä¸ªäººå…¬å‘Š
 	void SendText(PCWCHAR str, INT rgb, INT type);
-	// º°»°  type 3¸½½üÈË 1ÇÄÇÄ»°£¨½»Ò×¶Ô»°£© À®°È11 Ê¦Í½8  ¹¤»á6
+	// å–Šè¯  type 3é™„è¿‘äºº 1æ‚„æ‚„è¯ï¼ˆäº¤æ˜“å¯¹è¯ï¼‰ å–‡å­11 å¸ˆå¾’8  å·¥ä¼š6
 	void Shout(PCWCHAR str, INT type = 3);
-	// »æÖÆÎÄ±¾
+	// ç»˜åˆ¶æ–‡æœ¬
 	void DrawText2(INT x, INT y, INT rgb, PCWCHAR str);
 }

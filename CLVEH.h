@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <windows.h>
 #include <vector>
 using namespace std;
@@ -13,7 +13,7 @@ struct _VehData
 	DWORD VehHookAdress_;
 	DWORD HookCodeLen_;
 	BOOL  IsOnce_;
-	BYTE OldCode_; // ĞŞ¸ÄÎª BYTE£¬ÒòÎªÍ¨³£ÎÒÃÇÖ»ĞŞ¸ÄÒ»¸ö×Ö½ÚµÄÖ¸Áî
+	BYTE OldCode_; // ä¿®æ”¹ä¸º BYTEï¼Œå› ä¸ºé€šå¸¸æˆ‘ä»¬åªä¿®æ”¹ä¸€ä¸ªå­—èŠ‚çš„æŒ‡ä»¤
 	void(*Fun_)(struct _EXCEPTION_POINTERS* ExceptionInfo);
 };
 
@@ -26,7 +26,7 @@ public:
 	~CCLVEH();
 
 	vector<_VehData> VehList;
-	HANDLE hMutex; // Ê¹ÓÃ»¥³âÁ¿Ìæ´ú CCriticalSection
+	HANDLE hMutex; // ä½¿ç”¨äº’æ–¥é‡æ›¿ä»£ CCriticalSection
 	LPVOID m_Handle = 0;
 
 	void AddVeh(char* VehName, char* MoudleName, DWORD MoudleOffset, DWORD VehHookAdress, DWORD HookCodeLen_, int IsOnce, void(*Fun)(struct _EXCEPTION_POINTERS* ExceptionInfo));
