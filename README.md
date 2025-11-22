@@ -15,14 +15,10 @@ DOF 客户端插件，具备多种扩展功能
 3. 运行编译命令（Debug / x86）：
    ```powershell
    msbuild .\DofProject.sln /m /t:Clean,Build "/p:Configuration=Debug;Platform=x86"
-   msbuild .\DofProject.sln /m /t:Clean,Build "/p:Configuration=Release;Platform=x86"
    ```
-4. 编译成功后，生成的插件位于 `Debug` 或 `Release`目录：
+4. 编译成功后，生成的插件位于 `Debug` 目录：
    * `Debug\DofProject.dll`（插件主体）
    * `Debug\DofProject.pdb`（调试符号）
-
-   * `Release\DofProject.dll`（插件主体）
-   * `Release\DofProject.pdb`（调试符号）
 
 ## 免责声明
 * 本项目仅供学习与技术研究使用
@@ -36,6 +32,7 @@ DOF 客户端插件，具备多种扩展功能
 ## 自定义功能开关（配置示例）
 > DLL 加载成功后，默认会在同目录生成 `dof.ini` 配置文件（部分功能默认关闭，主要针对 0627 版本）
 
+```cpp
 // 初始化配置文件读写类
 xini_file_t xini_file(config_file);
 
@@ -74,6 +71,8 @@ xini_file["键位配置"]["1键Y轴"]   = 520;
 xini_file["键位配置"]["HookKey2"] = 56;  // Hook 菜单 ID
 xini_file["键位配置"]["2键X轴"]   = 718;
 xini_file["键位配置"]["2键Y轴"]   = 558;
+```
+
 
 ## 已知问题
 * “本地 GM” 功能开启后，游戏启动崩溃几率较高，**强烈建议保持关闭**（默认配置中为 `0`）
